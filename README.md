@@ -1,1 +1,0 @@
-# khine.thet.p1
