@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.revature.bean.Notification;
+import com.revature.bean.Request;
+
+
 public class User implements Serializable {
-	
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private UUID id;
 	private String email;
@@ -98,6 +102,9 @@ public class User implements Serializable {
 		this.request = request;
 	}
 	public List<Notification> getNotification() {
+		if(notification ==  null) {
+			notification = new ArrayList<Notification>();
+		}
 		return notification;
 	}
 	public void setNotification(List<Notification> notification) {

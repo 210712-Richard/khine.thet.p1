@@ -1,5 +1,8 @@
 package com.revature.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,15 +15,16 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatementBuilder;
-
+import com.revature.bean.Notification;
 import com.revature.bean.User;
 import com.revature.bean.UserType;
 import com.revature.factory.Log;
 import com.revature.util.CassandraUtil;
 
 @Log
-public class UserDAOImpl {
+public class UserDAOImpl implements UserDAO {
 	private CqlSession session = CassandraUtil.getInstance().getSession();
+	private static final Logger log = LogManager.getLogger(UserDAOImpl.class);
 	
 	public void addUser(User u) {
 		String query = "Insert into user (username, email, type, supervisor, department head) values (?, ?, ?, ?, ?, ?);";
@@ -31,6 +35,8 @@ public class UserDAOImpl {
 	}
 
 	public List<User> getUsers() {
+		log.trace("getUsers method called");
+		
 		String query = "Select name, email, type, supervisor and department head from user";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		ResultSet rs = session.execute(s);
@@ -49,7 +55,8 @@ public class UserDAOImpl {
 	}
 
 	public User getUser(String username) {
-
+		log.trace("getUser method called");
+		
 		String query = "Select username, email, type, supervisor, department head from user where username=?";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		BoundStatement bound = session.prepare(s).bind(username);
@@ -70,15 +77,11 @@ public class UserDAOImpl {
 	}  
 
 	public void updateUser(User user) {
-		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, department head = ? where username = ?;";
-		List<UUID> id = user.getId()
-							.stream()
-							.filter(notification -> notification!=null)
-							.map(notification -> notification.getId())
-							.collect(Collectors.toList());
+		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, departmenthead = ? where username = ?;";
+		List<Notification> notification = user.getNotification();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
-				.bind(user.getType().toString(), user.getEmail(), id, user.getDirectSupervisor(), user.getDepartmentHead());
+				.bind(user.getType().toString(), user.getEmail(), notification, user.getDirectSupervisor(), user.getDepartmentHead());
 		session.execute(bound);
 	}
 	

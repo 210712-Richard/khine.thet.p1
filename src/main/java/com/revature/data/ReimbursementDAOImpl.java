@@ -18,7 +18,7 @@ import com.revature.bean.UserType;
 import com.revature.factory.Log;
 import com.revature.util.CassandraUtil;
 
-public class ReimbursementDAOImpl {
+public class ReimbursementDAOImpl implements ReimbursementDAO {
 	private CqlSession session = CassandraUtil.getInstance().getSession();
 	
 	
