@@ -21,16 +21,25 @@ public class User implements Serializable {
 	public User() {
 		super();
 		this.type = UserType.EMPLOYEE;
-		this.request = new ArrayList();
+		this.request = new ArrayList<Request>();
 		this.pendingAmount = 0.00;
 		this.awardedAmount = 0.00;
 	}
 	
+	//employee
 	public User(String name, UUID id, String email, String directSupervisor, String departmentHead) {
 		this.name = name;
 		this.id = id;
 		this.email = email;
 		this.directSupervisor = directSupervisor;
+		this.departmentHead = departmentHead;
+	}
+	
+	//Direct Supervisor
+	public User(String name, UUID id, String email, String departmentHead) {
+		this.name = name;
+		this.id = id;
+		this.email = email;
 		this.departmentHead = departmentHead;
 	}
 	
