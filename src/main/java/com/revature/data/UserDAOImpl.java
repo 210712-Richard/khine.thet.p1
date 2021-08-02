@@ -67,18 +67,18 @@ public class UserDAOImpl {
 		user.setDepartmentHead(row.getString("department_head"));
 
 		return user;
-	}
+	}  
 
-	public void updateUser(User u) {
-		String query = "Update user set type = ?, email = ?, id = ? supervisor = ?, deaprtment head = ? where username = ?;";
-		List<UUID> id = u.getId()
-				.stream()
-				.filter(id -> id!=null)
-				.map(id -> id.getId())
-				.collect(Collectors.toList());
+	public void updateUser(User user) {
+		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, department head = ? where username = ?;";
+		List<UUID> id = user.getId()
+							.stream()
+							.filter(notification -> notification!=null)
+							.map(notification -> notification.getId())
+							.collect(Collectors.toList());
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
-				.bind(u.getType().toString(), u.getEmail(), id, u.getDirectSupervisor(), u.getDepartmentHead());
+				.bind(user.getType().toString(), user.getEmail(), id, user.getDirectSupervisor(), user.getDepartmentHead());
 		session.execute(bound);
 	}
 	
