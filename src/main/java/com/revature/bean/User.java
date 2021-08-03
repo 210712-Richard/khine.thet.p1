@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.revature.bean.Notification;
-import com.revature.bean.Request;
+import com.revature.bean.ReimbursementForm;
 
 
 public class User implements Serializable {
@@ -19,13 +19,13 @@ public class User implements Serializable {
 	private String departmentHead;
 	private Double pendingAmount;
 	private Double awardedAmount;
-	private List<Request> request;
+	private List<ReimbursementForm> reForm;
 	private List<Notification> notification;
 	
 	public User() {
 		super();
 		this.type = UserType.EMPLOYEE;
-		this.request = new ArrayList<Request>();
+		this.reForm = new ArrayList<ReimbursementForm>();
 		this.pendingAmount = 0.00;
 		this.awardedAmount = 0.00;
 	}
@@ -95,11 +95,11 @@ public class User implements Serializable {
 	public void setAwardedAmount(Double awardedAmount) {
 		this.awardedAmount = awardedAmount;
 	}
-	public List<Request> getRequest() {
-		return request;
+	public List<ReimbursementForm> getRequest() {
+		return reForm;
 	}
-	public void setRequest(List<Request> request) {
-		this.request = request;
+	public void setRequest(List<ReimbursementForm> request) {
+		this.reForm = request;
 	}
 	public List<Notification> getNotification() {
 		if(notification ==  null) {
@@ -123,7 +123,7 @@ public class User implements Serializable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((notification == null) ? 0 : notification.hashCode());
 		result = prime * result + ((pendingAmount == null) ? 0 : pendingAmount.hashCode());
-		result = prime * result + ((request == null) ? 0 : request.hashCode());
+		result = prime * result + ((reForm == null) ? 0 : reForm.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -193,11 +193,11 @@ public class User implements Serializable {
 		} else if (!pendingAmount.equals(other.pendingAmount)) {
 			return false;
 		}
-		if (request == null) {
-			if (other.request != null) {
+		if (reForm == null) {
+			if (other.reForm != null) {
 				return false;
 			}
-		} else if (!request.equals(other.request)) {
+		} else if (!reForm.equals(other.reForm)) {
 			return false;
 		}
 		if (type != other.type) {
@@ -210,6 +210,6 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [name=" + name + ", id=" + id + ", email=" + email + ", type=" + type + ", directSupervisor="
 				+ directSupervisor + ", departmentHead=" + departmentHead + ", pendingAmount=" + pendingAmount
-				+ ", awardedAmount=" + awardedAmount + ", request=" + request + ", notification=" + notification + "]";
+				+ ", awardedAmount=" + awardedAmount + ", request=" + reForm + ", notification=" + notification + "]";
 	}
 }

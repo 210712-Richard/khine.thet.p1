@@ -14,8 +14,8 @@ import io.javalin.plugin.json.JavalinJackson;
 public class Driver {
 
 	public static void main(String[] args) {
-		dbtest();
-		//javalin();
+		//dbtest();
+		javalin();
 
 	}
 	
