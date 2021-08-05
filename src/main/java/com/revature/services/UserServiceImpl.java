@@ -19,6 +19,12 @@ import com.revature.services.UserService;
 @Log
 public class UserServiceImpl {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
-	private UserService us = (UserService) BeanFactory.getFactory().get(UserDAO.class, UserDAOImpl.class);
+	private UserDAO ud = (UserDAO) BeanFactory.getFactory().get(UserDAO.class, UserDAOImpl.class);
 	
+	public User login(String name) {
+		User u = ud.getUser(name);
+		List<UUID> id = ud.getId(name);
+		
+		return u;		
+	}
 }

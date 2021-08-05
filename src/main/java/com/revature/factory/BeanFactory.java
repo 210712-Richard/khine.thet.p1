@@ -26,9 +26,8 @@ public class BeanFactory {
 		Object o = null;
 		Constructor<?> c;
 		try {
-			c = clazz.getConstructor(); // implicitly requiring a no-args constructor
+			c = clazz.getConstructor();
 			
-			// Creating a Proxy of the INTERFACE implemented by the CLASS
 			o = Proxy.newProxyInstance(inter.getClassLoader(),
 					new Class[] {inter},
 					new LogProxy(c.newInstance()));
@@ -38,15 +37,12 @@ public class BeanFactory {
 			for(StackTraceElement s: e.getStackTrace()) {
 				log.warn(s);
 			}
-			throw new BeanCreationFailureException(e); // choosing to fail but I'm wrapping the exception
-			// in a runtime exception so I don't have to handle it.
-			// This means that the failure is such that it shouldn't be handled and 
-			// should result in the failure of the application.
+			throw new BeanCreationFailureException(e);	
 		}
-		
 		return o;
 	}
 }
+
 
 class BeanCreationFailureException extends RuntimeException {
 	private static final long serialVersionUID = -4665442177863738341L;

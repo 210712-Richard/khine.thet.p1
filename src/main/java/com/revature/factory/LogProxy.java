@@ -40,10 +40,8 @@ public class LogProxy implements InvocationHandler {
 					log.warn(s);
 				}
 			}
-			throw e; // if the proxy doesn't throw the exception again, we'll have changed
-			// the code to never throw exceptions, which sometimes is good but might be bad.
+			throw e;
 		}
-		
 		return result;
 	}
 

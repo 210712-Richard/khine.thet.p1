@@ -27,6 +27,8 @@ public class UserDAOImpl implements UserDAO {
 	private static final Logger log = LogManager.getLogger(UserDAOImpl.class);
 	
 	public void addUser(User u) {
+		log.trace("addUser method called");
+		
 		String query = "Insert into user (username, email, type, supervisor, department head) values (?, ?, ?, ?, ?, ?);";
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
@@ -77,6 +79,8 @@ public class UserDAOImpl implements UserDAO {
 	}  
 
 	public void updateUser(User user) {
+		log.trace("updateUser method called");
+		
 		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, departmenthead = ? where username = ?;";
 		List<Notification> notification = user.getNotification();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
@@ -86,7 +90,9 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	public List<UUID> getId(String username) {
-		String query = "Select inbox from user where username=?";
+		log.trace("getId method called");
+		
+		String query = "Select id from user where username = ?";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		BoundStatement bound = session.prepare(s).bind(username);
 		ResultSet rs = session.execute(bound);

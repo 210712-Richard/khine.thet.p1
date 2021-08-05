@@ -13,4 +13,6 @@ public interface UserDAO {
 	public User getUser(String username);
 
 	public void updateUser(User user);
+	
+	public List<UUID> getId(String username);
 }

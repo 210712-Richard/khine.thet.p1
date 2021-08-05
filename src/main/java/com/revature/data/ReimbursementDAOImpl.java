@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
@@ -20,6 +23,6 @@ import com.revature.util.CassandraUtil;
 
 public class ReimbursementDAOImpl implements ReimbursementDAO {
 	private CqlSession session = CassandraUtil.getInstance().getSession();
-	
+	private static final Logger log = LogManager.getLogger(ReimbursementDAOImpl.class);
 	
 }

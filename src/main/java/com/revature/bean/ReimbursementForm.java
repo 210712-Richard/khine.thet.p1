@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class ReimbursementForm implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 102831973239L;
 	private UUID id;
 	private String name;
 	private String deptName;
