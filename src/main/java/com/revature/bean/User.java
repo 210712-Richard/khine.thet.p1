@@ -91,7 +91,7 @@ public class User implements Serializable {
 		return benCo;
 	}
 	public void setBenCo(String benCo) {
-		benCo = benCo;
+		this.benCo = benCo;
 	}
 	public Double getPendingAmount() {
 		return pendingAmount;

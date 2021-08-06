@@ -3,6 +3,7 @@ package com.revature.data;
 import java.util.List;
 import java.util.UUID;
 
+import com.revature.bean.Notification;
 import com.revature.bean.User;
 
 public interface UserDAO {
@@ -14,5 +15,5 @@ public interface UserDAO {
 
 	public void updateUser(User user);
 	
-	public List<UUID> getId(String username);
+	public List<Notification> getNotification(String username);
 }

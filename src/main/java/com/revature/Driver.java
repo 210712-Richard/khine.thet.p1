@@ -14,17 +14,29 @@ import io.javalin.plugin.json.JavalinJackson;
 public class Driver {
 
 	public static void main(String[] args) {
-		dbtest();
-		javalin();
-
+//		DataBaseCreator.createTables();
+		//javalin();
+		instantiateDatabase();
 	}
 	
-	private static void dbtest() {
-		StringBuilder sb = new StringBuilder("CREATE KEYSPACE IF NOT EXISTS \"project1\" WITH REPLICATION ")
-				.append(" :{'class' = 'SimpleStrategy', 'replication_factor' :1}");
-		CassandraUtil.getInstance().getSession().execute(sb.toString());		
+	public static void instantiateDatabase() {
+		DataBaseCreator.dropTables();
+		try {
+			Thread.sleep(20000);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		DataBaseCreator.createTables();
+		try {
+			Thread.sleep(10000);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		//DataBaseCreator.populateUserTable();
+		DataBaseCreator.populateReimbursementTable();
+		System.exit(0);
 	}
-
+	
 	public static void javalin() {
 		ObjectMapper jackson = new ObjectMapper();
 		jackson.registerModule(new JavaTimeModule());
@@ -36,23 +48,5 @@ public class Driver {
 		
 		UserController uc = (UserController) BeanFactory.getFactory().get(UserController.class, UserControllerImpl.class);
 	}
-	
-//	public static void instantiateDatabase() {
-//		DataBaseCreator.dropTables();
-//		try {
-//			Thread.sleep(30000);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		DataBaseCreator.createTables();
-//		try {
-//			Thread.sleep(20000);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		DataBaseCreator.populateUserTable();
-//		DataBaseCreator.populateReimbursementTable();
-//		System.exit(0);
-//	}
 
 }
