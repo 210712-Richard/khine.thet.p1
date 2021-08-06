@@ -23,6 +23,9 @@ public class ReimbursementForm implements Serializable {
 	private Period workTimeMissed;
 	private Boolean urgent;
 	private List<Attachment> attachment;
+	private ReimbursementApproval supervisorApproval;
+	private ReimbursementApproval departmentHeadApproval;
+	private ReimbursementApproval benCoApproval;
 	
 	public ReimbursementForm() {
 		super();
@@ -143,10 +146,35 @@ public class ReimbursementForm implements Serializable {
 	public void setUrgent(Boolean urgent) {
 		this.urgent = urgent;
 	}
+	public ReimbursementApproval getSupervisorApproval() {
+		return supervisorApproval;
+	}
+
+	public void setSupervisorApproval(ReimbursementApproval supervisorApproval) {
+		this.supervisorApproval = supervisorApproval;
+	}
+
+	public ReimbursementApproval getDepartmentHeadApproval() {
+		return departmentHeadApproval;
+	}
+
+	public void setDepartmentHeadApproval(ReimbursementApproval departmentHeadApproval) {
+		this.departmentHeadApproval = departmentHeadApproval;
+	}
+
+	public ReimbursementApproval getBenCoApproval() {
+		return benCoApproval;
+	}
+
+	public void setBenCoApproval(ReimbursementApproval benCoApproval) {
+		this.benCoApproval = benCoApproval;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(approvalDate, attachment, cost, deptName, description, format, id, location, name,
-				submittedDate, type, urgent, workTimeMissed);
+		return Objects.hash(approvalDate, attachment, benCoApproval, cost, departmentHeadApproval, deptName,
+				description, format, id, location, name, submittedDate, supervisorApproval, type, urgent,
+				workTimeMissed);
 	}
 
 	@Override
@@ -162,12 +190,14 @@ public class ReimbursementForm implements Serializable {
 		}
 		ReimbursementForm other = (ReimbursementForm) obj;
 		return Objects.equals(approvalDate, other.approvalDate) && Objects.equals(attachment, other.attachment)
-				&& Objects.equals(cost, other.cost) && Objects.equals(deptName, other.deptName)
-				&& Objects.equals(description, other.description) && Objects.equals(format, other.format)
-				&& Objects.equals(id, other.id) && Objects.equals(location, other.location)
-				&& Objects.equals(name, other.name) && Objects.equals(submittedDate, other.submittedDate)
-				&& type == other.type && Objects.equals(urgent, other.urgent)
-				&& Objects.equals(workTimeMissed, other.workTimeMissed);
+				&& Objects.equals(benCoApproval, other.benCoApproval) && Objects.equals(cost, other.cost)
+				&& Objects.equals(departmentHeadApproval, other.departmentHeadApproval)
+				&& Objects.equals(deptName, other.deptName) && Objects.equals(description, other.description)
+				&& Objects.equals(format, other.format) && Objects.equals(id, other.id)
+				&& Objects.equals(location, other.location) && Objects.equals(name, other.name)
+				&& Objects.equals(submittedDate, other.submittedDate)
+				&& Objects.equals(supervisorApproval, other.supervisorApproval) && type == other.type
+				&& Objects.equals(urgent, other.urgent) && Objects.equals(workTimeMissed, other.workTimeMissed);
 	}
 	
 	@Override

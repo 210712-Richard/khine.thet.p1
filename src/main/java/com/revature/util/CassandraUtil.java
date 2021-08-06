@@ -18,7 +18,7 @@ public class CassandraUtil {
 		try {
 			this.session = CqlSession.builder().withConfigLoader(loader).withKeyspace("project1").build();
 		} catch (Exception e) {
-			log.error("Method threw exception: " + e);
+			log.error("Method threw exception: "+e);
 			for(StackTraceElement s : e.getStackTrace()) {
 				log.warn(s);
 			}

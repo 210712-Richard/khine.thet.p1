@@ -11,25 +11,30 @@ public class DataBaseCreator {
 		StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS User;");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
-		sb = new StringBuilder("DROP TABLE IF EXISTS Form");
+		sb = new StringBuilder("DROP TABLE IF EXISTS ReForm");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
+		sb = new StringBuilder("DROP TABLE IF EXISTS Notification");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 
 	public static void createTables() {
 		StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS User (")
-				.append("username text PRIMARY KEY, email text, type test, ")
-				.append("directSupervisor text, departmentHead text, benCo text, reForm list<uuid> );");
+				.append("username text PRIMARY KEY, email text, type text, ")
+				.append("directsupervisor text, departmenthead text, benco text, reform list<uuid> );");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
-//		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS reForm (")
-//				.append("id uuid, name text, deptName text, submitteDate date, approvalDate date, ")
-//				.append("location text, description text, cost bigInt, gradeFormat text, ")
-//				.append("type text, timeMissed text, urgent boolean, attachment list<uuid> ")
-//				.append("primary key(id, name, submittedDate));");
-//		
-//		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS notification (")
-//				.append("name text, id uuid, approvalStatus boolean, approvalDate date, reason text, ")
-//				.append("primary key(name, id));");
+		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Reimbursementform (")
+				.append("id uuid, name text, deptName text, submitteddate date, approvaldate date, ")
+				.append("location text, description text, cost bigInt, gradeFormat text, ")
+				.append("type text, timemissed text, urgent boolean, attachment list<uuid>, ")
+				.append("primary key(id, name, submitteddate));");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
+		
+		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Notification (")
+				.append("name text, id uuid, approvalstatus text, approvaldate date, reason text, ")
+				.append("primary key(name, id));");
+		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 
 //	public static void populateUserTable() {

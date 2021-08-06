@@ -1,5 +1,8 @@
 package com.revature.bean;
 
-public interface Approval {
-
+public enum Approval {
+	APPROVED,
+	REJECTED,
+	AUTO_APPROVED,
+	PENDING
 }

@@ -8,8 +8,14 @@ public class ReimbursementApproval {
 	private Approval status;
 	private String reason;
 	
-	private ReimbursementApproval() {
+	public ReimbursementApproval() {
 		super();
+		this.status = Approval.PENDING;
+	}
+	
+	public ReimbursementApproval(Approval status, String reason) {
+		this.status = status;
+		this.reason = reason;
 	}
 	
 	public LocalDateTime getDealine() {
