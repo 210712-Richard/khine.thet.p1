@@ -31,30 +31,38 @@ public class User implements Serializable {
 		this.awardedAmount = 0.00;
 	}
 	
-	//employee
-	public User(String name, String email, UserType type, String directSupervisor, String departmentHead, String BenCo) {
+	//Employee
+	public User(String name, String email, String directSupervisor, String departmentHead, String benCo) {
+		this();
 		this.name = name;
 		this.email = email;
-		this.type = type;
 		this.directSupervisor = directSupervisor;
 		this.departmentHead = departmentHead;
+		this.benCo = benCo;
 	}
 	
 	//Direct Supervisor
-	public User(String name, String email, UserType type, String departmentHead, String benCo) {
+	public User(String name, String email, String departmentHead, String benCo) {
+		this();
 		this.name = name;
 		this.email = email;
-		this.type = type;
 		this.departmentHead = departmentHead;
 		this.benCo = benCo;
 	}
 	
 	//Department Head
-	public User(String name, String email, UserType type, String benCo) {
+	public User(String name, String email, String benCo) {
+		this();
 		this.name = name;
 		this.email = email;
-		this.type = type;
 		this.benCo = benCo;
+	}
+	
+	//benCO
+	public User(String name, String email) {
+		this();
+		this.name = name;
+		this.email = email;
 	}
 	
 	public String getName() {
@@ -129,15 +137,12 @@ public class User implements Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		User other = (User) obj;
 		return Objects.equals(awardedAmount, other.awardedAmount) && Objects.equals(benCo, other.benCo)
 				&& Objects.equals(departmentHead, other.departmentHead)

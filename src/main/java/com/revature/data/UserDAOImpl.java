@@ -32,7 +32,7 @@ public class UserDAOImpl implements UserDAO {
 		String query = "Insert into user (username, email, type, directSupervisor, departmentHead, benCo, reForm) values (?, ?, ?, ?, ?, ?, ?);";
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
-				.bind(u.getName(), u.getEmail(), u.getType().toString(), u.getDirectSupervisor(), u.getDepartmentHead(), u.getRequest());
+				.bind(u.getName(), u.getEmail(), u.getType().toString(), u.getDirectSupervisor(), u.getDepartmentHead(), u.getBenCo(), u.getRequest());
 		session.execute(bound);
 	}
 
@@ -83,11 +83,11 @@ public class UserDAOImpl implements UserDAO {
 	public void updateUser(User user) {
 		log.trace("updateUser method called");
 		
-		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, departmenthead = ? where username = ?;";
+		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, departmenthead = ?, benco = ? where username = ?;";
 		List<Notification> notification = user.getNotification();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
-				.bind(user.getType().toString(), user.getEmail(), notification, user.getDirectSupervisor(), user.getDepartmentHead());
+				.bind(user.getType().toString(), user.getEmail(), notification, user.getDirectSupervisor(), user.getDepartmentHead(), user.getBenCo());
 		session.execute(bound);
 	}
 	

@@ -205,6 +205,8 @@ public class ReimbursementForm implements Serializable {
 		return "ReimbursementForm [id=" + id + ", name=" + name + ", deptName=" + deptName + ", submittedDate="
 				+ submittedDate + ", approvalDate=" + approvalDate + ", location=" + location + ", description="
 				+ description + ", cost=" + cost + ", format=" + format + ", type=" + type + ", workTimeMissed="
-				+ workTimeMissed + ", urgent=" + urgent + ", attachment=" + attachment + "]";
+				+ workTimeMissed + ", urgent=" + urgent + ", attachment=" + attachment + ", supervisorApproval="
+				+ supervisorApproval + ", departmentHeadApproval=" + departmentHeadApproval + ", benCoApproval="
+				+ benCoApproval + "]";
 	}	
 }

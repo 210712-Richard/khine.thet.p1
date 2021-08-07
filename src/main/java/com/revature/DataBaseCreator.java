@@ -1,5 +1,7 @@
 package com.revature;
 
+import com.revature.bean.User;
+import com.revature.bean.UserType;
 import com.revature.data.*;
 import com.revature.util.CassandraUtil;
 
@@ -28,6 +30,9 @@ public class DataBaseCreator {
 				.append("id uuid, name text, deptName text, submitteddate date, approvaldate date, ")
 				.append("location text, description text, cost bigInt, gradeFormat text, ")
 				.append("type text, timemissed text, urgent boolean, attachment list<uuid>, ")
+				.append("supervisorapproval tuple<timestamp, text, text>, ")
+				.append("departmentheadapproval tuple<timestamp, text, text>, ")
+				.append("bencoapproval tuple<timestamp, text, text>, ")
 				.append("primary key(id, name, submitteddate));");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
@@ -37,10 +42,38 @@ public class DataBaseCreator {
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 
-//	public static void populateUserTable() {
-//		ud.addUser("Jelly", "jellybean@bean.com", "employee", "Dulce", "Cherry", "Reese");
-//		
-//	}
+	public static void populateUserTable() {
+		//Adding Supervisor
+		User  u = new User("Jelly", "jellybean@bean.com", "Cherry", "Reese");
+		u.setType(UserType.DIRECT_SUPERVISOR);
+		ud.addUser(u);
+		User  u1 = new User("Dulce", "dulce@candy.com", "Basil", "Ferrero");
+		u1.setType(UserType.DIRECT_SUPERVISOR);
+		ud.addUser(u1);
+		
+		//Adding Department Head
+		User u2 = new User("Cherry", "Cherie@hill.com", "Ferrero");
+		u2.setType(UserType.DEPARTMENT_HEAD);
+		ud.addUser(u2);
+		User u3 = new User("Basil", "basil@leef.com", "Reese");
+		u3.setType(UserType.DEPARTMENT_HEAD);
+		ud.addUser(u3);
+		
+		//Adding BenCo
+		User u4 = new User("Reese", "reesecup@mini.com");
+		u4.setType(UserType.BENCO);
+		ud.addUser(u4);
+		User u5 = new User("Ferrero", "rocherf@fero.com");
+		u5.setType(UserType.BENCO);
+		ud.addUser(u5);
+		
+		//Adding EMPLOYEE
+		ud.addUser(new User("Iris", "Iris@irie.com", "Dulce", "Basil", "Reese"));
+		ud.addUser(new User("Florence", "florence@gmail.com", "Jelly", "Cherry", "Ferrero"));
+		ud.addUser(new User("Sunny", "sunny@shiny.com", "Jelly", "Cherry", "Ferrero"));
+		ud.addUser(new User("Henry", "hennie@re.com", "Jelly", "Cherry", "Ferrero"));
+		ud.addUser(new User("William", "liam@wii.com", "Dulce", "Basil", "Reese"));
+	}
 
 	public static void populateReimbursementTable() {
 		// TODO Auto-generated method stub
