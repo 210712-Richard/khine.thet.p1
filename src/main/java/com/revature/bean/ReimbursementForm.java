@@ -20,7 +20,7 @@ public class ReimbursementForm implements Serializable {
 	private Long cost;
 	private GradingFormat format;
 	private ReimbursementType type;
-	private Period workTimeMissed;
+	private String workTimeMissed;
 	private Boolean urgent;
 	private List<Attachment> attachment;
 	private ReimbursementApproval supervisorApproval;
@@ -125,12 +125,12 @@ public class ReimbursementForm implements Serializable {
 		this.type = type;
 	}
 
-	public Period getWorkTimeMissed() {
+	public String getWorkTimeMissed() {
 		return workTimeMissed;
 	}
 
-	public void setWorkTimeMissed(Period workTimeMissed) {
-		this.workTimeMissed = workTimeMissed;
+	public void setWorkTimeMissed(String string) {
+		this.workTimeMissed = string;
 	}
 	public List<Attachment> getAttachment() {
 		return attachment;

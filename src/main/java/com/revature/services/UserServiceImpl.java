@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
 	private UserDAO ud = (UserDAO) BeanFactory.getFactory().get(UserDAO.class, UserDAOImpl.class);
 	
+	@Override
 	public User login(String name) {
 		User u = ud.getUser(name);
 		return u;		

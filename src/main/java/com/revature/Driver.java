@@ -20,27 +20,26 @@ public class Driver {
 		//DataBaseCreator.createTables();
 		//DataBaseCreator.populateUserTable();
 		//instantiateDatabase();
-		javalin();
-		
+		javalin();	
 	}
 	
-	public static void instantiateDatabase() {
-		DataBaseCreator.dropTables();
-		try {
-			Thread.sleep(20000);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		DataBaseCreator.createTables();
-		try {
-			Thread.sleep(10000);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		DataBaseCreator.populateUserTable();
-		//DataBaseCreator.populateReimbursementTable();
-		System.exit(0);
-	}
+//	public static void instantiateDatabase() {
+//		DataBaseCreator.dropTables();
+//		try {
+//			Thread.sleep(20000);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		DataBaseCreator.createTables();
+//		try {
+//			Thread.sleep(10000);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		DataBaseCreator.populateUserTable();
+//		//DataBaseCreator.populateReimbursementTable();
+//		System.exit(0);
+//	}
 	
 	public static void javalin() {
 		ObjectMapper jackson = new ObjectMapper();
@@ -57,10 +56,10 @@ public class Driver {
 		app.get("/", (ctx)->ctx.html("This is Project 1"));
 		
 		// login
-		app.post("/login", uc::login);
+		app.post("/users", uc::login);
 				
 		// logout
-		app.delete("/login", uc::logout);
+		app.delete("/users", uc::logout);
 	}
 
 }

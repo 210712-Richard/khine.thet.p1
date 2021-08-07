@@ -60,12 +60,12 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	@Override
-	public User getUser(String username) {
+	public User getUser(String name) {
 		log.trace("getUser method called");
 		
 		String query = "Select username, email, type, directsupervisor, departmenthead, benco from user where username = ?";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
-		BoundStatement bound = session.prepare(s).bind(username);
+		BoundStatement bound = session.prepare(s).bind(name);
 
 		ResultSet rs = session.execute(bound);
 		Row row = rs.one();
@@ -87,7 +87,7 @@ public class UserDAOImpl implements UserDAO {
 	public void updateUser(User user) {
 		log.trace("updateUser method called");
 		
-		String query = "Update user set type = ?, email = ?, id = ?, supervisor = ?, departmenthead = ?, benco = ? where username = ?;";
+		String query = "Update user set type = ?, email = ?, supervisor = ?, departmenthead = ?, benco = ? where username = ?;";
 		List<Notification> notification = user.getNotification();
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
