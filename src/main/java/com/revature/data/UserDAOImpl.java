@@ -26,20 +26,22 @@ public class UserDAOImpl implements UserDAO {
 	private CqlSession session = CassandraUtil.getInstance().getSession();
 	private static final Logger log = LogManager.getLogger(UserDAOImpl.class);
 	
+	@Override
 	public void addUser(User u) {
 		log.trace("addUser method called");
 		
-		String query = "Insert into user (username, email, type, directSupervisor, departmentHead, benCo, reForm) values (?, ?, ?, ?, ?, ?, ?);";
+		String query = "Insert into user (username, email, type, directsupervisor, departmenthead, benco, reform) values (?, ?, ?, ?, ?, ?, ?);";
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
 				.bind(u.getName(), u.getEmail(), u.getType().toString(), u.getDirectSupervisor(), u.getDepartmentHead(), u.getBenCo(), u.getRequest());
 		session.execute(bound);
 	}
-
+	
+	@Override
 	public List<User> getUsers() {
 		log.trace("getUsers method called");
 		
-		String query = "Select name, email, type, directSupervisor and departmentHead, benCo from user";
+		String query = "Select username, email, type, directsupervisor, departmenthead, benco from user";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		ResultSet rs = session.execute(s);
 		List<User> users = new ArrayList<>();
@@ -48,19 +50,20 @@ public class UserDAOImpl implements UserDAO {
 			u.setName(row.getString("username"));
 			u.setEmail(row.getString("email"));
 			u.setType(UserType.valueOf(row.getString("type")));
-			u.setDirectSupervisor(row.getString("directSupervisor"));
-			u.setDepartmentHead(row.getString("departmentHead"));
-			u.setBenCo(row.getString("benCo"));
+			u.setDirectSupervisor(row.getString("directsupervisor"));
+			u.setDepartmentHead(row.getString("departmenthead"));
+			u.setBenCo(row.getString("benco"));
 			
 			users.add(u);
 		});
 		return users;
 	}
-
+	
+	@Override
 	public User getUser(String username) {
 		log.trace("getUser method called");
 		
-		String query = "Select username, email, type, supervisor, department head, benCo from user where username=?";
+		String query = "Select username, email, type, directsupervisor, departmenthead, benco from user where username = ?";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		BoundStatement bound = session.prepare(s).bind(username);
 
@@ -73,13 +76,14 @@ public class UserDAOImpl implements UserDAO {
 		user.setName(row.getString("username"));
 		user.setEmail(row.getString("email"));
 		user.setType(UserType.valueOf(row.getString("type")));
-		user.setDirectSupervisor(row.getString("direct_supervisor"));
-		user.setDepartmentHead(row.getString("department_head"));
-		user.setBenCo(row.getString("benCo"));
+		user.setDirectSupervisor(row.getString("directsupervisor"));
+		user.setDepartmentHead(row.getString("departmenthead"));
+		user.setBenCo(row.getString("benco"));
 
 		return user;
 	}  
-
+	
+	@Override
 	public void updateUser(User user) {
 		log.trace("updateUser method called");
 		
@@ -91,11 +95,12 @@ public class UserDAOImpl implements UserDAO {
 		session.execute(bound);
 	}
 	
+	@Override
 	public List<Notification> getNotification(String username) {
 		log.trace("getNotification method called");
 		
 		List<Notification> notifications = new ArrayList<Notification>();
-		String query = "Select name, id, approvalStatus, approvalDate, reason from user where username = ?";
+		String query = "Select name, id, approvalstatus, approvaldate, reason from user where username = ?";
 		SimpleStatement s = new SimpleStatementBuilder(query).build();
 		BoundStatement bound = session.prepare(s).bind(username);
 		ResultSet rs = session.execute(bound);
@@ -104,8 +109,8 @@ public class UserDAOImpl implements UserDAO {
 			Notification notification = new Notification();
 			notification.setName(row.getString("name"));
 			notification.setId(row.getUuid("id"));
-			notification.setApprovalStatus(row.getString("approvalStatus"));
-			notification.setApprovalDate(row.getLocalDate("approvalDate"));
+			notification.setApprovalStatus(row.getString("approvalstatus"));
+			notification.setApprovalDate(row.getLocalDate("approvaldate"));
 			notification.setReason(row.getString("reason"));
 			
 			notifications.add(notification);

@@ -36,6 +36,8 @@ public class UserControllerImpl implements UserController {
 	
 	@Override
 	public void logout(Context ctx) {
+		log.trace("Logout method called");
 		ctx.req.getSession().invalidate();
+		ctx.status(204);
 	}
 }

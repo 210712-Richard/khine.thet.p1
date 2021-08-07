@@ -4,6 +4,8 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.revature.controller.ReimbursementController;
+import com.revature.controller.ReimbursementControllerImpl;
 import com.revature.controller.UserController;
 import com.revature.controller.UserControllerImpl;
 import com.revature.factory.BeanFactory;
@@ -16,9 +18,10 @@ public class Driver {
 
 	public static void main(String[] args) {
 		//DataBaseCreator.createTables();
-		DataBaseCreator.populateUserTable();
-		//javalin();
+		//DataBaseCreator.populateUserTable();
 		//instantiateDatabase();
+		javalin();
+		
 	}
 	
 	public static void instantiateDatabase() {
@@ -49,6 +52,15 @@ public class Driver {
 		Javalin app = Javalin.create().start(8080);
 		
 		UserController uc = (UserController) BeanFactory.getFactory().get(UserController.class, UserControllerImpl.class);
+		//ReimbursementController rc = (ReimbursementController) BeanFactory.getFactory().get(ReimbursementController.class, ReimbursementControllerImpl.class);
+		
+		app.get("/", (ctx)->ctx.html("This is Project 1"));
+		
+		// login
+		app.post("/login", uc::login);
+				
+		// logout
+		app.delete("/login", uc::logout);
 	}
 
 }
