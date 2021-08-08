@@ -10,9 +10,9 @@ public interface ReimbursementDAO {
 	
 	List<ReimbursementForm> getReimbursementForm();
 	
-	ReimbursementForm getReimbursementFormByNameandId(String user, UUID id);
+	ReimbursementForm getReimbursementFormByNameandId(UUID id, String user);
 	
-	void updateReimbursementForm(String name, UUID id);
+	void updateReimbursementForm(ReimbursementForm reForm);
 	
 	void deleteReimbursementForm(String name, UUID id);	
 }

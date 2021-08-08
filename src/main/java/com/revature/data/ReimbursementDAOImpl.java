@@ -117,19 +117,89 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 		return reform;
 	}
 	@Override
-	public ReimbursementForm getReimbursementFormByNameandId(String user, UUID id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void updateReimbursementForm(String name, UUID id) {
-		// TODO Auto-generated method stub
+	public ReimbursementForm getReimbursementFormByNameandId(UUID id, String name) {
+		String query = "Select id, name, deptName, submittedDate, approvalDate, "
+					 + "location, description, cost, format, type, timemissed, urgent, "
+					 + "attachment, supervisorApproval, departmentheadApproval, bencoapproval where id = ? and name = ?";
+		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(id.toString(), name);
 		
+		ResultSet rs = session.execute(bound);
+		Row row = rs.one();
+		if(row == null) {
+			return null;
+		}
+		ReimbursementForm rf = new ReimbursementForm();
+		rf.setId(row.getUuid("id"));
+		rf.setName(row.getString("name"));
+		rf.setDeptName(row.getString("deptName"));
+		rf.setSubmittedDate(row.getLocalDate("submittedDate"));
+		rf.setApprovalDate(row.getLocalDate("approvalDate"));
+		rf.setLocation(row.getString("location"));
+		rf.setDescription(row.getString("description"));
+		rf.setCost(row.getLong("cost"));
+		rf.setFormat(GradingFormat.valueOf(row.getString("format")));
+		rf.setType(ReimbursementType.valueOf(row.getString("type")));
+		rf.setWorkTimeMissed(row.getString("timemissed"));
+		rf.setUrgent(row.getBoolean("urgent"));
+		rf.setAttachment(row.getList("attachment", Attachment.class));
+		rf.setSupervisorApproval(new ReimbursementApproval(
+				row.getTupleValue("supervisorApproval").get(0, LocalDateTime.class),
+				row.getTupleValue("supervisorApproval").get(1, Approval.class),
+				row.getTupleValue("supervisorApproval").get(2,  String.class)));
+		rf.setDepartmentHeadApproval(new ReimbursementApproval(
+				row.getTupleValue("departmentheadApproval").get(0, LocalDateTime.class),
+				row.getTupleValue("departmentheadApproval").get(1, Approval.class),
+				row.getTupleValue("departmentheadApproval").get(2, String.class)));
+		rf.setBenCoApproval(new ReimbursementApproval(
+				row.getTupleValue("bencoApproval").get(0, LocalDateTime.class),
+				row.getTupleValue("bencoApproval").get(1, Approval.class),
+				row.getTupleValue("bencoApproval").get(2, String.class)));
+		
+		return rf;
 	}
+	
+	@Override
+	public void updateReimbursementForm(ReimbursementForm reForm) {
+		String query = "Update reimbursementform set approvalDate = ?, urgent = ?, attachment = ?, "
+					 + "supervisorApproval = ?, departmentheadApproval = ?, bencoApproval = ? where name = ? and id = ?";
+		
+		TupleValue supervisorApproval = APPROVAL_TUPLE 
+				.newValue(reForm.getSupervisorApproval().getDealine(), 
+						  reForm.getSupervisorApproval().getStatus(), 
+						  reForm.getSupervisorApproval().getReason());
+		TupleValue departmentHeadApproval = APPROVAL_TUPLE
+				.newValue(reForm.getDepartmentHeadApproval().getDealine(),
+						   reForm.getDepartmentHeadApproval().getStatus(),
+						   reForm.getDepartmentHeadApproval().getReason());
+						   
+		TupleValue benCoApproval = APPROVAL_TUPLE
+				.newValue(reForm.getBenCoApproval().getDealine(),
+						  reForm.getBenCoApproval().getStatus(),
+						  reForm.getBenCoApproval().getReason());
+		
+		SimpleStatement s = new SimpleStatementBuilder(query)
+				.setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+				.build();
+				
+		BoundStatement bound = session.prepare(s).bind(
+				reForm.getApprovalDate(),
+				reForm.getUrgent(),
+				reForm.getAttachment(),
+				supervisorApproval,
+				departmentHeadApproval,
+				benCoApproval);
+		session.execute(bound);
+	}
+	
 	@Override
 	public void deleteReimbursementForm(String name, UUID id) {
-		// TODO Auto-generated method stub
-		
+		String query = "Delete from reimbursementform where name = ?, id = ?";
+		BoundStatement bound = session
+				.prepare(new SimpleStatementBuilder(query)
+						.setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
+						.build())
+				.bind(name, id);
+		session.execute(bound);
 	}
 	
 }
