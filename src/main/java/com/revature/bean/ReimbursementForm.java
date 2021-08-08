@@ -32,7 +32,7 @@ public class ReimbursementForm implements Serializable {
 	}
 	
 	public ReimbursementForm(String name, LocalDate submittedDate, LocalDate approvalDate,
-			String location, String description, Long cost, GradingFormat format, ReimbursementType type, Period workTimeMissed, List<Attachment> attachment) {
+			String location, String description, Long cost, GradingFormat format, ReimbursementType type, String workTimeMissed, List<Attachment> attachment) {
 		this.name = name;
 		this.submittedDate = submittedDate;
 		this.approvalDate = approvalDate;

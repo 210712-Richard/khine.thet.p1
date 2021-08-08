@@ -8,9 +8,9 @@ import com.revature.bean.ReimbursementForm;
 public interface ReimbursementDAO {
 	void addReimbursementForm(ReimbursementForm reimbursement);
 	
-	List<ReimbursementForm> getReimbursementForm(String name);
+	List<ReimbursementForm> getReimbursementForm();
 	
-	ReimbursementForm getReimbursementFormByName(String user, UUID id);
+	ReimbursementForm getReimbursementFormByNameandId(String user, UUID id);
 	
 	void updateReimbursementForm(String name, UUID id);
 	

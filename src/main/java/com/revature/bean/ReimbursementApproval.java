@@ -13,7 +13,9 @@ public class ReimbursementApproval {
 		this.status = Approval.PENDING;
 	}
 	
-	public ReimbursementApproval(Approval status, String reason) {
+	public ReimbursementApproval(LocalDateTime deadline, Approval status, String reason) {
+		this();
+		this.deadline = deadline;
 		this.status = status;
 		this.reason = reason;
 	}
