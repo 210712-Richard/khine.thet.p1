@@ -52,7 +52,7 @@ public class Driver {
 		Javalin app = Javalin.create().start(8080);
 		
 		UserController uc = (UserController) BeanFactory.getFactory().get(UserController.class, UserControllerImpl.class);
-		//ReimbursementController rc = (ReimbursementController) BeanFactory.getFactory().get(ReimbursementController.class, ReimbursementControllerImpl.class);
+		ReimbursementController rc = (ReimbursementController) BeanFactory.getFactory().get(ReimbursementController.class, ReimbursementControllerImpl.class);
 		
 		app.get("/", (ctx)->ctx.html("This is Project 1"));
 		
@@ -61,6 +61,8 @@ public class Driver {
 				
 		// logout
 		app.delete("/users", uc::logout);
+		
+		app.post("/requests/", rc::addReimbursement);
 	}
 
 }

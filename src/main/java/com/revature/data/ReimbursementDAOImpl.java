@@ -77,11 +77,11 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	}
 	
 	@Override
-	public List<ReimbursementForm> getReimbursementForm() {
+	public List<ReimbursementForm> getReimbursementForm(String name) {
 		List<ReimbursementForm> reform = new ArrayList<ReimbursementForm>();
 		String query = "Select id, name, deptName, submittedDate, approvalDate, "
 					 + "location, description, cost, gradeformat, type, timemissed, urgent, "
-					 + "attachment, supervisorapproval, departmentheadapproval, bencoapproval from reimbursementform";
+					 + "attachment, supervisorapproval, departmentheadapproval, bencoapproval where username = ?";
 		
 		ResultSet rs = session.execute(new SimpleStatementBuilder(query).build());
 		rs.forEach(row -> {

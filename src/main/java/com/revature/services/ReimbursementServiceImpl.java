@@ -47,8 +47,8 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	}
 
 	@Override
-	public List<ReimbursementForm> getReimbursementForm() {
-		List<ReimbursementForm> reForm = reDAO.getReimbursementForm();
+	public List<ReimbursementForm> getReimbursementForm(String name) {
+		List<ReimbursementForm> reForm = reDAO.getReimbursementForm(name);
 		return reForm;
 	}
 

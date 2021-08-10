@@ -14,7 +14,7 @@ public interface ReimbursementService {
 	
 	void updateReimbursementForm(ReimbursementForm reForm);
 	
-	List<ReimbursementForm> getReimbursementForm();
+	List<ReimbursementForm> getReimbursementForm(String name);
 	
 	void deleteReimbursementForm(String name, UUID id);
 }

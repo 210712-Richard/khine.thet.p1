@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ReimbursementForm implements Serializable {
+public class ReimbursementForm implements ReimbursementRequest {
 	private static final long serialVersionUID = 102831973239L;
 	private UUID id;
 	private String name;
@@ -28,11 +28,12 @@ public class ReimbursementForm implements Serializable {
 	private ReimbursementApproval benCoApproval;
 	
 	public ReimbursementForm() {
-		super();
+		super();		
 	}
 	
 	public ReimbursementForm(String name, LocalDate submittedDate, LocalDate approvalDate,
 			String location, String description, Long cost, GradingFormat format, ReimbursementType type, String workTimeMissed, List<Attachment> attachment) {
+		this();
 		this.name = name;
 		this.submittedDate = submittedDate;
 		this.approvalDate = approvalDate;
@@ -44,7 +45,7 @@ public class ReimbursementForm implements Serializable {
 		this.workTimeMissed = workTimeMissed;
 		this.attachment = attachment;
 	}
-	
+
 	public UUID getId() {
 		return id;
 	}
@@ -208,5 +209,7 @@ public class ReimbursementForm implements Serializable {
 				+ workTimeMissed + ", urgent=" + urgent + ", attachment=" + attachment + ", supervisorApproval="
 				+ supervisorApproval + ", departmentHeadApproval=" + departmentHeadApproval + ", benCoApproval="
 				+ benCoApproval + "]";
-	}	
+	}
+
+		
 }
