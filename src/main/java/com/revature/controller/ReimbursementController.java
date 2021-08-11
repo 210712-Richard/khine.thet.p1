@@ -6,9 +6,9 @@ public interface ReimbursementController {
 	//As a Employee, I can add the form.
 	void addReimbursement(Context ctx);
 	//As a Employee, I can add attachment.
-	void addAttachment(Context ctx);
+	void uploadAttachment(Context ctx);
 	//As a Employee, I can add presentation.
-	void addPresentation(Context ctx);
+	void uploadPresentation(Context ctx);
 	//As a Employee, I can see the approval status.
 	void getStatus(Context ctx);
 	//As an Employee, I can get notification.

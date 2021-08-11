@@ -8,13 +8,13 @@ import com.revature.bean.*;
 
 public interface ReimbursementService {
 	
-	ReimbursementForm addReimbursementForm(String username, String deptName, 
-			LocalDate submittedDate, String location, String description,
-			Long cost, GradingFormat format, ReimbursementType type, String workTimeMissed, Boolean urgent);
+	ReimbursementForm addReimbursementForm(String username, LocalDate submittedDate, 
+			String location, String description, Double cost, GradingFormat format,
+			ReimbursementType type, String workTimeMissed, Boolean urgent);
 	
-	void updateReimbursementForm(ReimbursementForm reForm);
+	void updateReimbursementForm(ReimbursementRequest reRequest);
 	
-	List<ReimbursementForm> getReimbursementForm(String name);
+	List<ReimbursementForm> getReimbursementForm(UUID id, String name);
 	
 	void deleteReimbursementForm(String name, UUID id);
 }

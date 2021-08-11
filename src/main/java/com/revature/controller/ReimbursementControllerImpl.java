@@ -1,9 +1,13 @@
 package com.revature.controller;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.revature.bean.User;
+import com.revature.bean.UserType;
 import com.revature.bean.ReimbursementForm;
 import com.revature.bean.ReimbursementRequest;
 import com.revature.data.UserDAOImpl;
@@ -41,77 +45,206 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		ReimbursementRequest reRequest = ctx.bodyAsClass(ReimbursementForm.class);
 		log.debug(reRequest);
 		
-		reRequest = reService.addReimbursementForm(loggedUser.getName(), reRequest.getDeptName(), 
+		reService.addReimbursementForm(loggedUser.getName(), 
 				reRequest.getSubmittedDate(), reRequest.getLocation(), reRequest.getDescription(),
 				reRequest.getCost(), reRequest.getFormat(), reRequest.getType(),
 				reRequest.getWorkTimeMissed(), reRequest.getUrgent());
 		
-		ctx.json(reRequest);
+			ctx.json(reRequest);
 	}
 
 	@Override
-	public void addAttachment(Context ctx) {
-		// TODO Auto-generated method stub
+	public void uploadAttachment(Context ctx) {
+		log.trace("addAttachment method called");
+		log.debug(ctx.body());
 		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
+		//check if we are the EMPLOYEE
+		if(!loggedUser.getType().equals(UserType.EMPLOYEE)) {
+			ctx.status(403);
+			return;
+		}
+		
+		UUID id = UUID.fromString(ctx.pathParam("id"));
+		if(id == null) {
+			ctx.status(400);
+			return;
+		}
+		String username = ctx.pathParam("name");
+		ReimbursementRequest reForm =  (ReimbursementRequest) reService.getReimbursementForm(id, username);
+		//check if form exists
+		if(reForm == null) {
+			ctx.status(404);
+			return;
+		}
+		
+		String filetype = ctx.header("extension");
+		if(filetype == null) {
+			ctx.status(400);
+			return;
+		}
+		
+		String key =  id +"." + filetype;
+		S3Util.getInstance().uploadToBucket(key, ctx.bodyAsBytes());
+		reForm.getAttachment().add(key);
+		reService.updateReimbursementForm(reForm);
+		ctx.json(reForm);	
 	}
 
 	@Override
-	public void addPresentation(Context ctx) {
-		// TODO Auto-generated method stub
+	public void uploadPresentation(Context ctx) {
+		log.trace("addPresentation method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void getStatus(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("getStatus method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void getNotification(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("getNotification method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void getReason(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("getReason method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void deleteForm(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("deleteForm method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void getReimbursement(Context ctx) {
-		// TODO Auto-generated method stub
+//		log.trace("getReimbursement method called");
+//		log.debug("Reimbursement Form for" + ctx.pathParam("reimbursementId"));
+//		
+//		User loggedUser = ctx.sessionAttribute("loggedUser");
+//		//login check
+//		if(loggedUser == null) {
+//			ctx.status(401);
+//			return;
+//		}
+//		
+//		String employee = ctx.pathParam("employee");
+//		String loggedName = loggedUser.getName();
+//	
+//		ReimbursementRequest reRequest = reService.getReimbursementForm(employee);
+//		
+//		if(loggedName.equals(employee)) {
+//			ctx.json(reRequest);
+//		} else {
+//			ctx.status(403);
+//		}
+//		
 		
 	}
 
 	@Override
 	public void getAttachment(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("getAttachment method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void getPresentation(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("getPresentation method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void updateApproval(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("updateApproval method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 
 	@Override
 	public void changeReimbursementAmount(Context ctx) {
-		// TODO Auto-generated method stub
+		log.trace("changeReimbursementAmount method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
 		
 	}
 

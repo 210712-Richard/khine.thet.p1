@@ -2,8 +2,8 @@ package com.revature.bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -12,38 +12,37 @@ public class ReimbursementForm implements ReimbursementRequest {
 	private static final long serialVersionUID = 102831973239L;
 	private UUID id;
 	private String name;
-	private String deptName;
 	private LocalDate submittedDate;
 	private LocalDate approvalDate;
 	private String location;
 	private String description;
-	private Long cost;
+	private Double cost;
 	private GradingFormat format;
 	private ReimbursementType type;
 	private String workTimeMissed;
 	private Boolean urgent;
-	private List<Attachment> attachment;
+	private List<String> attachment;
 	private ReimbursementApproval supervisorApproval;
 	private ReimbursementApproval departmentHeadApproval;
 	private ReimbursementApproval benCoApproval;
 	
 	public ReimbursementForm() {
-		super();		
+		super();
+		this.approvalDate = LocalDate.from(submittedDate).plus(1, ChronoUnit.MINUTES); //submittedDate, LocalTime.of(0, 0).plusMinutes(1));
 	}
 	
-	public ReimbursementForm(String name, LocalDate submittedDate, LocalDate approvalDate,
-			String location, String description, Long cost, GradingFormat format, ReimbursementType type, String workTimeMissed, List<Attachment> attachment) {
+	public ReimbursementForm(String name, LocalDate submittedDate, String location, 
+			String description, Double cost, GradingFormat format, ReimbursementType type, String workTimeMissed, Boolean urgent) {
 		this();
 		this.name = name;
 		this.submittedDate = submittedDate;
-		this.approvalDate = approvalDate;
 		this.location = location;
 		this.description = description;
 		this.cost = cost;
 		this.format = format;
 		this.type = type;
 		this.workTimeMissed = workTimeMissed;
-		this.attachment = attachment;
+		this.urgent = urgent;
 	}
 
 	public UUID getId() {
@@ -78,14 +77,6 @@ public class ReimbursementForm implements ReimbursementRequest {
 		this.approvalDate = approvalDate;
 	}
 
-	public String getDeptName() {
-		return deptName;
-	}
-
-	public void setDeptName(String deptName) {
-		this.deptName = deptName;
-	}
-
 	public String getLocation() {
 		return location;
 	}
@@ -102,11 +93,11 @@ public class ReimbursementForm implements ReimbursementRequest {
 		this.description = description;
 	}
 
-	public Long getCost() {
+	public Double getCost() {
 		return cost;
 	}
 
-	public void setCost(Long cost) {
+	public void setCost(Double cost) {
 		this.cost = cost;
 	}
 
@@ -133,11 +124,11 @@ public class ReimbursementForm implements ReimbursementRequest {
 	public void setWorkTimeMissed(String string) {
 		this.workTimeMissed = string;
 	}
-	public List<Attachment> getAttachment() {
+	public List<String> getAttachment() {
 		return attachment;
 	}
 
-	public void setAttachment(List<Attachment> attachment) {
+	public void setAttachment(List<String> attachment) {
 		this.attachment = attachment;
 	}	
 	public Boolean getUrgent() {
@@ -173,43 +164,39 @@ public class ReimbursementForm implements ReimbursementRequest {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(approvalDate, attachment, benCoApproval, cost, departmentHeadApproval, deptName,
-				description, format, id, location, name, submittedDate, supervisorApproval, type, urgent,
-				workTimeMissed);
+		return Objects.hash(approvalDate, attachment, benCoApproval, cost, departmentHeadApproval, description, format,
+				id, location, name, submittedDate, supervisorApproval, type, urgent, workTimeMissed);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		ReimbursementForm other = (ReimbursementForm) obj;
 		return Objects.equals(approvalDate, other.approvalDate) && Objects.equals(attachment, other.attachment)
 				&& Objects.equals(benCoApproval, other.benCoApproval) && Objects.equals(cost, other.cost)
 				&& Objects.equals(departmentHeadApproval, other.departmentHeadApproval)
-				&& Objects.equals(deptName, other.deptName) && Objects.equals(description, other.description)
-				&& Objects.equals(format, other.format) && Objects.equals(id, other.id)
-				&& Objects.equals(location, other.location) && Objects.equals(name, other.name)
-				&& Objects.equals(submittedDate, other.submittedDate)
+				&& Objects.equals(description, other.description) && format == other.format
+				&& Objects.equals(id, other.id) && Objects.equals(location, other.location)
+				&& Objects.equals(name, other.name) && Objects.equals(submittedDate, other.submittedDate)
 				&& Objects.equals(supervisorApproval, other.supervisorApproval) && type == other.type
 				&& Objects.equals(urgent, other.urgent) && Objects.equals(workTimeMissed, other.workTimeMissed);
 	}
 	
 	@Override
 	public String toString() {
-		return "ReimbursementForm [id=" + id + ", name=" + name + ", deptName=" + deptName + ", submittedDate="
-				+ submittedDate + ", approvalDate=" + approvalDate + ", location=" + location + ", description="
-				+ description + ", cost=" + cost + ", format=" + format + ", type=" + type + ", workTimeMissed="
-				+ workTimeMissed + ", urgent=" + urgent + ", attachment=" + attachment + ", supervisorApproval="
-				+ supervisorApproval + ", departmentHeadApproval=" + departmentHeadApproval + ", benCoApproval="
-				+ benCoApproval + "]";
+		return "ReimbursementForm [id=" + id + ", name=" + name + ", submittedDate=" + submittedDate + ", approvalDate="
+				+ approvalDate + ", location=" + location + ", description=" + description + ", cost=" + cost
+				+ ", format=" + format + ", type=" + type + ", workTimeMissed=" + workTimeMissed + ", urgent=" + urgent
+				+ ", attachment=" + attachment + ", supervisorApproval=" + supervisorApproval
+				+ ", departmentHeadApproval=" + departmentHeadApproval + ", benCoApproval=" + benCoApproval + "]";
 	}
+
+
 
 		
 }

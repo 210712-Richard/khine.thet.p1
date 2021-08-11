@@ -4,15 +4,16 @@ import java.util.List;
 import java.util.UUID;
 
 import com.revature.bean.ReimbursementForm;
+import com.revature.bean.ReimbursementRequest;
 
 public interface ReimbursementDAO {
 	void addReimbursementForm(ReimbursementForm reimbursement);
 	
-	List<ReimbursementForm> getReimbursementForm(String name);
-	
 	ReimbursementForm getReimbursementFormByNameandId(UUID id, String user);
 	
-	void updateReimbursementForm(ReimbursementForm reForm);
+	void updateReimbursementForm(ReimbursementRequest reRequest);
 	
-	void deleteReimbursementForm(String name, UUID id);	
+	void deleteReimbursementForm(String name, UUID id);
+
+	List<ReimbursementForm> getReimbursementForm(UUID id, String name);	
 }

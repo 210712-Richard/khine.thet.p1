@@ -1,5 +1,10 @@
 package com.revature;
 
+import java.time.LocalDate;
+
+import com.revature.bean.GradingFormat;
+import com.revature.bean.ReimbursementForm;
+import com.revature.bean.ReimbursementType;
 import com.revature.bean.User;
 import com.revature.bean.UserType;
 import com.revature.data.*;
@@ -13,7 +18,7 @@ public class DataBaseCreator {
 		StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS User;");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
-		sb = new StringBuilder("DROP TABLE IF EXISTS ReForm");
+		sb = new StringBuilder("DROP TABLE IF EXISTS Reimbursementform");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
 		sb = new StringBuilder("DROP TABLE IF EXISTS Notification");
@@ -27,7 +32,7 @@ public class DataBaseCreator {
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		
 		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Reimbursementform (")
-				.append("id uuid, name text, deptName text, submitteddate date, approvaldate date, ")
+				.append("id uuid, name text, submitteddate date, approvaldate date, ")
 				.append("location text, description text, cost bigInt, gradeFormat text, ")
 				.append("type text, timemissed text, urgent boolean, attachment list<uuid>, ")
 				.append("supervisorapproval tuple<timestamp, text, text>, ")
@@ -76,7 +81,9 @@ public class DataBaseCreator {
 	}
 
 	public static void populateReimbursementTable() {
-		// TODO Auto-generated method stub
+		rd.addReimbursementForm(new ReimbursementForm("Sunny", LocalDate.of(2021, 07, 14), "123 Flower Road, Brooklyn NY 12345",
+								"8 weeks university course for Organic Chemistry.", 400.75, GradingFormat.LETTER_GRADE, ReimbursementType.UNIVERSITY,
+								"Once a week", true));
 		
 	}
 

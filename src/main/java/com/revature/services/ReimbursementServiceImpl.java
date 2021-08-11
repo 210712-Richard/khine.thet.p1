@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.revature.bean.GradingFormat;
 import com.revature.bean.ReimbursementForm;
+import com.revature.bean.ReimbursementRequest;
 import com.revature.bean.ReimbursementType;
 import com.revature.data.ReimbursementDAO;
 import com.revature.data.ReimbursementDAOImpl;
@@ -21,12 +22,11 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	public ReimbursementDAO reDAO = (ReimbursementDAO) BeanFactory.getFactory().get(ReimbursementDAO.class, ReimbursementDAOImpl.class);
 	
 	@Override
-	public ReimbursementForm addReimbursementForm(String username, String deptName, LocalDate submittedDate,
-			String location, String description, Long cost, GradingFormat format, ReimbursementType type,
+	public ReimbursementForm addReimbursementForm(String username, LocalDate submittedDate,
+			String location, String description, Double cost, GradingFormat format, ReimbursementType type,
 			String workTimeMissed, Boolean urgent) {
 		ReimbursementForm reForm = new ReimbursementForm();
 		reForm.setName(username);
-		reForm.setDeptName(deptName);
 		reForm.setSubmittedDate(submittedDate);
 		reForm.setLocation(location);
 		reForm.setDescription(description);
@@ -42,13 +42,13 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 	}
 
 	@Override
-	public void updateReimbursementForm(ReimbursementForm reForm) {
-		reDAO.updateReimbursementForm(reForm);
+	public void updateReimbursementForm(ReimbursementRequest reRequest) {
+		reDAO.updateReimbursementForm(reRequest);
 	}
 
 	@Override
-	public List<ReimbursementForm> getReimbursementForm(String name) {
-		List<ReimbursementForm> reForm = reDAO.getReimbursementForm(name);
+	public List<ReimbursementForm> getReimbursementForm(UUID id, String name) {
+		List<ReimbursementForm> reForm = reDAO.getReimbursementForm(id, name);
 		return reForm;
 	}
 

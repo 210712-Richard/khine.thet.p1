@@ -30,6 +30,7 @@ import com.revature.bean.Attachment;
 import com.revature.bean.GradingFormat;
 import com.revature.bean.ReimbursementApproval;
 import com.revature.bean.ReimbursementForm;
+import com.revature.bean.ReimbursementRequest;
 import com.revature.bean.ReimbursementType;
 import com.revature.bean.User;
 import com.revature.bean.UserType;
@@ -45,29 +46,27 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	
 	@Override
 	public void addReimbursementForm(ReimbursementForm reimbursement) {
-		String query = "Insert into reimbursementform (id, name, deptName, submittedDate, approvalDate, "
+		log.trace("addReimbursementForm method called");
+		String query = "Insert into reimbursementform (id, name, submittedDate, approvalDate, "
 					 + "location, description, cost, gradeformat, type, timemissed, urgent, "
 					 + "attachment, supervisorapproval, departmentheadapproval, bencoapproval) "
 					 + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		UUID id = UUID.randomUUID();
 		TupleValue supervisorApproval = APPROVAL_TUPLE 
-				.newValue(reimbursement.getSupervisorApproval().getDealine(), 
-						  reimbursement.getSupervisorApproval().getStatus(), 
+				.newValue(reimbursement.getSupervisorApproval().getStatus(), 
 						  reimbursement.getSupervisorApproval().getReason());
 		TupleValue departmentHeadApproval = APPROVAL_TUPLE
-				.newValue(reimbursement.getDepartmentHeadApproval().getDealine(),
-						   reimbursement.getDepartmentHeadApproval().getStatus(),
-						   reimbursement.getDepartmentHeadApproval().getReason());
+				.newValue(reimbursement.getDepartmentHeadApproval().getStatus(),
+						  reimbursement.getDepartmentHeadApproval().getReason());
 						   
 		TupleValue benCoApproval = APPROVAL_TUPLE
-				.newValue(reimbursement.getBenCoApproval().getDealine(),
-						  reimbursement.getBenCoApproval().getStatus(),
+				.newValue(reimbursement.getBenCoApproval().getStatus(),
 						  reimbursement.getBenCoApproval().getReason());
 		
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 							.build();
 		
-		BoundStatement bound = session.prepare(s).bind(id, reimbursement.getName(), reimbursement.getDeptName(),
+		BoundStatement bound = session.prepare(s).bind(id, reimbursement.getName(),
 								reimbursement.getSubmittedDate(), reimbursement.getApprovalDate(),
 								reimbursement.getLocation(), reimbursement.getDescription(), reimbursement.getCost(),
 								reimbursement.getFormat(), reimbursement.getType(), reimbursement.getWorkTimeMissed(),
@@ -77,40 +76,33 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	}
 	
 	@Override
-	public List<ReimbursementForm> getReimbursementForm(String name) {
+	public List<ReimbursementForm> getReimbursementForm(UUID id, String name) {
+		log.trace("getReimbursementForm method called");
 		List<ReimbursementForm> reform = new ArrayList<ReimbursementForm>();
-		String query = "Select id, name, deptName, submittedDate, approvalDate, "
+		String query = "Select id, name, submittedDate, approvalDate, "
 					 + "location, description, cost, gradeformat, type, timemissed, urgent, "
-					 + "attachment, supervisorapproval, departmentheadapproval, bencoapproval where username = ?";
+					 + "attachment, supervisorapproval, departmentheadapproval, bencoapproval where id = ? and name = ?";
 		
 		ResultSet rs = session.execute(new SimpleStatementBuilder(query).build());
 		rs.forEach(row -> {
 			ReimbursementForm rf = new ReimbursementForm();
 			rf.setId(row.getUuid("id"));
 			rf.setName(row.getString("name"));
-			rf.setDeptName(row.getString("deptName"));
 			rf.setSubmittedDate(row.getLocalDate("submittedDate"));
-			rf.setApprovalDate(row.getLocalDate("approvalDate"));
 			rf.setLocation(row.getString("location"));
 			rf.setDescription(row.getString("description"));
-			rf.setCost(row.getLong("cost"));
+			rf.setCost(row.getDouble("cost"));
 			rf.setFormat(GradingFormat.valueOf(row.getString("format")));
 			rf.setType(ReimbursementType.valueOf(row.getString("type")));
 			rf.setWorkTimeMissed(row.getString("timemissed"));
 			rf.setUrgent(row.getBoolean("urgent"));
-			rf.setAttachment(row.getList("attachment", Attachment.class));
+			rf.setAttachment(row.getList("attachment", String.class));
 			rf.setSupervisorApproval(new ReimbursementApproval(
-					row.getTupleValue("supervisorApproval").get(0, LocalDateTime.class),
-					row.getTupleValue("supervisorApproval").get(1, Approval.class),
-					row.getTupleValue("supervisorApproval").get(2,  String.class)));
+					row.getTupleValue("supervisorApproval").get(1,  String.class)));
 			rf.setDepartmentHeadApproval(new ReimbursementApproval(
-					row.getTupleValue("departmentheadApproval").get(0, LocalDateTime.class),
-					row.getTupleValue("departmentheadApproval").get(1, Approval.class),
-					row.getTupleValue("departmentheadApproval").get(2, String.class)));
+					row.getTupleValue("departmentheadApproval").get(1, String.class)));
 			rf.setBenCoApproval(new ReimbursementApproval(
-					row.getTupleValue("bencoApproval").get(0, LocalDateTime.class),
-					row.getTupleValue("bencoApproval").get(1, Approval.class),
-					row.getTupleValue("bencoApproval").get(2, String.class)));
+					row.getTupleValue("bencoApproval").get(1, String.class)));
 			reform.add(rf);
 		
 		});
@@ -119,7 +111,8 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	
 	@Override
 	public ReimbursementForm getReimbursementFormByNameandId(UUID id, String name) {
-		String query = "Select id, name, deptName, submittedDate, approvalDate, "
+		log.trace("getReimbursementFormByIdAndName method called");
+		String query = "Select id, name, submittedDate, approvalDate, "
 					 + "location, description, cost, format, type, timemissed, urgent, "
 					 + "attachment, supervisorApproval, departmentheadApproval, bencoapproval where id = ? and name = ?";
 		BoundStatement bound = session.prepare(new SimpleStatementBuilder(query).build()).bind(id.toString(), name);
@@ -132,60 +125,50 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 		ReimbursementForm rf = new ReimbursementForm();
 		rf.setId(row.getUuid("id"));
 		rf.setName(row.getString("name"));
-		rf.setDeptName(row.getString("deptName"));
 		rf.setSubmittedDate(row.getLocalDate("submittedDate"));
-		rf.setApprovalDate(row.getLocalDate("approvalDate"));
 		rf.setLocation(row.getString("location"));
 		rf.setDescription(row.getString("description"));
-		rf.setCost(row.getLong("cost"));
+		rf.setCost(row.getDouble("cost"));
 		rf.setFormat(GradingFormat.valueOf(row.getString("format")));
 		rf.setType(ReimbursementType.valueOf(row.getString("type")));
 		rf.setWorkTimeMissed(row.getString("timemissed"));
 		rf.setUrgent(row.getBoolean("urgent"));
-		rf.setAttachment(row.getList("attachment", Attachment.class));
+		rf.setAttachment(row.getList("attachment", String.class));
 		rf.setSupervisorApproval(new ReimbursementApproval(
-				row.getTupleValue("supervisorApproval").get(0, LocalDateTime.class),
-				row.getTupleValue("supervisorApproval").get(1, Approval.class),
-				row.getTupleValue("supervisorApproval").get(2,  String.class)));
+				row.getTupleValue("supervisorApproval").get(0,  String.class)));
 		rf.setDepartmentHeadApproval(new ReimbursementApproval(
-				row.getTupleValue("departmentheadApproval").get(0, LocalDateTime.class),
-				row.getTupleValue("departmentheadApproval").get(1, Approval.class),
-				row.getTupleValue("departmentheadApproval").get(2, String.class)));
+				row.getTupleValue("departmentheadApproval").get(0, String.class)));
 		rf.setBenCoApproval(new ReimbursementApproval(
-				row.getTupleValue("bencoApproval").get(0, LocalDateTime.class),
-				row.getTupleValue("bencoApproval").get(1, Approval.class),
-				row.getTupleValue("bencoApproval").get(2, String.class)));
+				row.getTupleValue("bencoApproval").get(0, String.class)));
 		
 		return rf;
 	}
 	
 	@Override
-	public void updateReimbursementForm(ReimbursementForm reForm) {
+	public void updateReimbursementForm(ReimbursementRequest reRequest) {
+		log.trace("updateReimbursementForm method called");
 		String query = "Update reimbursementform set approvalDate = ?, urgent = ?, attachment = ?, "
 					 + "supervisorApproval = ?, departmentheadApproval = ?, bencoApproval = ? where name = ? and id = ?";
 		
 		TupleValue supervisorApproval = APPROVAL_TUPLE 
-				.newValue(reForm.getSupervisorApproval().getDealine(), 
-						  reForm.getSupervisorApproval().getStatus(), 
-						  reForm.getSupervisorApproval().getReason());
+				.newValue(reRequest.getSupervisorApproval().getStatus(), 
+						  reRequest.getSupervisorApproval().getReason());
 		TupleValue departmentHeadApproval = APPROVAL_TUPLE
-				.newValue(reForm.getDepartmentHeadApproval().getDealine(),
-						   reForm.getDepartmentHeadApproval().getStatus(),
-						   reForm.getDepartmentHeadApproval().getReason());
+				.newValue(reRequest.getDepartmentHeadApproval().getStatus(),
+						   reRequest.getDepartmentHeadApproval().getReason());
 						   
 		TupleValue benCoApproval = APPROVAL_TUPLE
-				.newValue(reForm.getBenCoApproval().getDealine(),
-						  reForm.getBenCoApproval().getStatus(),
-						  reForm.getBenCoApproval().getReason());
+				.newValue(reRequest.getBenCoApproval().getStatus(),
+						  reRequest.getBenCoApproval().getReason());
 		
 		SimpleStatement s = new SimpleStatementBuilder(query)
 				.setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM)
 				.build();
 				
 		BoundStatement bound = session.prepare(s).bind(
-				reForm.getApprovalDate(),
-				reForm.getUrgent(),
-				reForm.getAttachment(),
+				reRequest.getApprovalDate(),
+				reRequest.getUrgent(),
+				reRequest.getAttachment(),
 				supervisorApproval,
 				departmentHeadApproval,
 				benCoApproval);
@@ -194,6 +177,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 	
 	@Override
 	public void deleteReimbursementForm(String name, UUID id) {
+		log.trace("deleteReimbursementForm method called");
 		String query = "Delete from reimbursementform where name = ?, id = ?";
 		BoundStatement bound = session
 				.prepare(new SimpleStatementBuilder(query)

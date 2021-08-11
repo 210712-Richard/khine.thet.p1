@@ -1,10 +1,9 @@
 package com.revature.bean;
 
-import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class ReimbursementApproval {
 	
-	private LocalDateTime deadline;
 	private Approval status;
 	private String reason;
 	
@@ -13,21 +12,11 @@ public class ReimbursementApproval {
 		this.status = Approval.PENDING;
 	}
 	
-	public ReimbursementApproval(LocalDateTime deadline, Approval status, String reason) {
+	public ReimbursementApproval(String reason) {
 		this();
-		this.deadline = deadline;
-		this.status = status;
 		this.reason = reason;
 	}
 	
-	public LocalDateTime getDealine() {
-		return deadline;
-	}
-
-	public void setDealine(LocalDateTime dealine) {
-		this.deadline = dealine;
-	}
-
 	public Approval getStatus() {
 		return status;
 	}
@@ -47,52 +36,23 @@ public class ReimbursementApproval {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((deadline == null) ? 0 : deadline.hashCode());
-		result = prime * result + ((reason == null) ? 0 : reason.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		return result;
+		return Objects.hash(reason, status);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		ReimbursementApproval other = (ReimbursementApproval) obj;
-		if (deadline == null) {
-			if (other.deadline != null) {
-				return false;
-			}
-		} else if (!deadline.equals(other.deadline)) {
-			return false;
-		}
-		if (reason == null) {
-			if (other.reason != null) {
-				return false;
-			}
-		} else if (!reason.equals(other.reason)) {
-			return false;
-		}
-		if (status == null) {
-			if (other.status != null) {
-				return false;
-			}
-		} else if (!status.equals(other.status)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(reason, other.reason) && status == other.status;
 	}
 	
 	@Override
 	public String toString() {
-		return "ReimbursementApproval [dealine=" + deadline + ", status=" + status + ", reason=" + reason + "]";
+		return "ReimbursementApproval [status=" + status + ", reason=" + reason + "]";
 	}
 }

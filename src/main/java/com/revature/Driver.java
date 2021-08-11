@@ -20,6 +20,7 @@ public class Driver {
 		//DataBaseCreator.createTables();
 		//DataBaseCreator.populateUserTable();
 		//DataBaseCreator.populateReimbursementTable();
+		//DataBaseCreator.dropTables();
 		//instantiateDatabase();
 		javalin();	
 	}
@@ -62,7 +63,14 @@ public class Driver {
 		// logout
 		app.delete("/users", uc::logout);
 		
+		//add reimbursement
 		app.post("/requests/", rc::addReimbursement);
+		
+		//get reimbursement
+		app.get("/requests/:employee", rc::getReimbursement);
+		
+		//upload attachment
+		app.post("/requests/:username/id", rc::uploadAttachment);
 	}
 
 }

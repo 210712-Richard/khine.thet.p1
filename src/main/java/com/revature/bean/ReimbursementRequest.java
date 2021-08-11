@@ -2,25 +2,25 @@ package com.revature.bean;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public interface ReimbursementRequest extends Serializable {
 	Integer Max_Reimbursement_Amount = 1000;
-	
 	//How to make the request limit to 1000?
-	
+	//make it from submitted date and add the value you want to for approval date
 	UUID getId();
 	void setId(UUID id);
 	
 	String getName();
 	void setName(String name);
 	
-	String getDeptName();
-	void setDeptName(String deptName);
-	
 	LocalDate getSubmittedDate();
 	void setSubmittedDate(LocalDate submittedDate);
+	
+	LocalDate getApprovalDate();
+	void setApprovalDate(LocalDate approvalDate);
 	
 	String getLocation();
 	void setLocation(String location);
@@ -28,8 +28,8 @@ public interface ReimbursementRequest extends Serializable {
 	String getDescription();
 	void setDescription(String description);
 	
-	Long getCost();
-	void setCost(Long cost);
+	Double getCost();
+	void setCost(Double cost);
 	
 	GradingFormat getFormat();
 	void setFormat(GradingFormat format);
@@ -42,8 +42,8 @@ public interface ReimbursementRequest extends Serializable {
 	
 	Boolean getUrgent();
 	
-	List<Attachment> getAttachment();
-	void setAttachment(List<Attachment> attachment);
+	List<String> getAttachment();
+	void setAttachment(List<String> attachment);
 	
 	ReimbursementApproval getSupervisorApproval();
 	void setSupervisorApproval(ReimbursementApproval supervisorApproval);
