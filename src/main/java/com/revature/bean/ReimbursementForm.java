@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class ReimbursementForm implements ReimbursementRequest {
 	
 	public ReimbursementForm() {
 		super();
-		this.approvalDate = LocalDate.from(submittedDate).plus(1, ChronoUnit.MINUTES); //submittedDate, LocalTime.of(0, 0).plusMinutes(1));
+		this.approvalDate = LocalDate.of(2021, 12, 12);//LocalDate.from(submittedDate).plusDays(1);
 	}
 	
 	public ReimbursementForm(String name, LocalDate submittedDate, String location, 

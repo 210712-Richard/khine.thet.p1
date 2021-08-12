@@ -57,4 +57,9 @@ public class ReimbursementServiceImpl implements ReimbursementService {
 		reDAO.deleteReimbursementForm(name, id);		
 	}
 
+	@Override
+	public void getApprovalDate(LocalDate submittedDate) {
+		this.getApprovalDate(submittedDate);	
+	}
+
 }

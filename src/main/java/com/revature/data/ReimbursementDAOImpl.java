@@ -24,7 +24,6 @@ import com.datastax.oss.driver.api.core.cql.SimpleStatementBuilder;
 import com.datastax.oss.driver.api.core.data.TupleValue;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.TupleType;
-import com.esri.core.geometry.NonSimpleResult.Reason;
 import com.revature.bean.Approval;
 import com.revature.bean.Attachment;
 import com.revature.bean.GradingFormat;

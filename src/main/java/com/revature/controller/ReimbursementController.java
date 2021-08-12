@@ -3,9 +3,9 @@ package com.revature.controller;
 import io.javalin.http.Context;
 
 public interface ReimbursementController {
-	//As a Employee, I can add the form.
+	//As a Employee, I can add the form.(done)
 	void addReimbursement(Context ctx);
-	//As a Employee, I can add attachment.
+	//As a Employee, I can add attachment.(done)
 	void uploadAttachment(Context ctx);
 	//As a Employee, I can add presentation.
 	void uploadPresentation(Context ctx);
@@ -15,13 +15,13 @@ public interface ReimbursementController {
 	void getNotification(Context ctx);
 	//As a Employee, I can see the approval/ rejection reason.
 	void getReason(Context ctx);
-	//As an Employee, I can delete the reimbursement form.
+	//As an Employee, I can delete the reimbursement form.(done)
 	void deleteForm(Context ctx);
 	
 	
-	//As a Supervisor, deptHead and benCo I can view the reimbursement form.
+	//As a Supervisor, deptHead and benCo I can view the reimbursement form.(done)
 	void getReimbursement(Context ctx);
-	//As a supervisor, deptHead and benCo, I can view the attachment.
+	//As a supervisor, deptHead and benCo, I can view the attachment.(done)
 	void getAttachment(Context ctx);
 	//As a supervisor, deptHead, benCo I can view the presentation
 	void getPresentation(Context ctx);

@@ -12,9 +12,15 @@ public interface ReimbursementService {
 			String location, String description, Double cost, GradingFormat format,
 			ReimbursementType type, String workTimeMissed, Boolean urgent);
 	
+	//ReimbursementForm addReimbursementForm(String username);
+	
 	void updateReimbursementForm(ReimbursementRequest reRequest);
 	
 	List<ReimbursementForm> getReimbursementForm(UUID id, String name);
 	
+	//ReimbursementRequest getReimbursementForm(UUID id, String name);
+	
 	void deleteReimbursementForm(String name, UUID id);
+	
+	void getApprovalDate(LocalDate submittedDate);
 }

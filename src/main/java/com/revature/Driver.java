@@ -64,13 +64,16 @@ public class Driver {
 		app.delete("/users", uc::logout);
 		
 		//add reimbursement
-		app.post("/requests/", rc::addReimbursement);
+		app.post("/requests/:employee", rc::addReimbursement);
 		
 		//get reimbursement
 		app.get("/requests/:employee", rc::getReimbursement);
 		
 		//upload attachment
 		app.post("/requests/:username/id", rc::uploadAttachment);
+		
+		//get request
+		app.get("/requests/:id", rc::getReimbursement);
 	}
 
 }

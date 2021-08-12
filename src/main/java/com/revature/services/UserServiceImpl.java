@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.revature.bean.Notification;
 import com.revature.bean.User;
+import com.revature.data.NotificationDAO;
+import com.revature.data.NotificationDAOImpl;
 import com.revature.data.UserDAO;
 import com.revature.data.UserDAOImpl;
 import com.revature.factory.BeanFactory;
@@ -19,8 +21,8 @@ import com.revature.services.UserService;
 @Log
 public class UserServiceImpl implements UserService {
 	private Logger log = LogManager.getLogger(UserServiceImpl.class);
-	private UserDAO ud = (UserDAO) BeanFactory.getFactory().get(UserDAO.class, UserDAOImpl.class);
-	
+	public UserDAO ud = (UserDAO) BeanFactory.getFactory().get(UserDAO.class, UserDAOImpl.class);
+	public NotificationDAO rd = (NotificationDAO) BeanFactory.getFactory().get(NotificationDAO.class, NotificationDAOImpl.class);
 	@Override
 	public User login(String name) {
 		User u = ud.getUser(name);
@@ -32,4 +34,10 @@ public class UserServiceImpl implements UserService {
 		List<Notification> notification = ud.getNotification(username);
 		return notification;
 	}
+	
+	//For UserServiceTest
+//	public UserServiceImpl(UserDAO ud) {
+//		this.ud = ud;
+//	}
+	
 }

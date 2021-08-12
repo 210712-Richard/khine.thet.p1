@@ -1,6 +1,7 @@
 package com.revature;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import com.revature.bean.GradingFormat;
 import com.revature.bean.ReimbursementForm;
@@ -35,9 +36,9 @@ public class DataBaseCreator {
 				.append("id uuid, name text, submitteddate date, approvaldate date, ")
 				.append("location text, description text, cost bigInt, gradeFormat text, ")
 				.append("type text, timemissed text, urgent boolean, attachment list<uuid>, ")
-				.append("supervisorapproval tuple<timestamp, text, text>, ")
-				.append("departmentheadapproval tuple<timestamp, text, text>, ")
-				.append("bencoapproval tuple<timestamp, text, text>, ")
+				.append("supervisorapproval tuple<text, text>, ")
+				.append("departmentheadapproval tuple<text, text>, ")
+				.append("bencoapproval tuple<text, text>, ")
 				.append("primary key(id, name, submitteddate));");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 		

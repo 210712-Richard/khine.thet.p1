@@ -1,5 +1,6 @@
 package com.revature.controller;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,7 +94,7 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		S3Util.getInstance().uploadToBucket(key, ctx.bodyAsBytes());
 		reForm.getAttachment().add(key);
 		reService.updateReimbursementForm(reForm);
-		ctx.json(reForm);	
+		ctx.json(reForm);
 	}
 
 	@Override
@@ -164,31 +165,41 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 			return;
 		}
 		
+		UUID id = UUID.fromString("id");
+		String employee = ctx.pathParam("employee");
+		
+		if(employee.equals(loggedUser.getName())) {
+			ReimbursementForm reForm = (ReimbursementForm) reService.getReimbursementForm(id, employee);
+			reService.deleteReimbursementForm(employee, id);
+		} else {
+			ctx.status(403);
+		}
+		
 	}
 
 	@Override
 	public void getReimbursement(Context ctx) {
-//		log.trace("getReimbursement method called");
-//		log.debug("Reimbursement Form for" + ctx.pathParam("reimbursementId"));
-//		
-//		User loggedUser = ctx.sessionAttribute("loggedUser");
-//		//login check
-//		if(loggedUser == null) {
-//			ctx.status(401);
-//			return;
-//		}
-//		
-//		String employee = ctx.pathParam("employee");
-//		String loggedName = loggedUser.getName();
-//	
-//		ReimbursementRequest reRequest = reService.getReimbursementForm(employee);
-//		
-//		if(loggedName.equals(employee)) {
-//			ctx.json(reRequest);
-//		} else {
-//			ctx.status(403);
-//		}
-//		
+		log.trace("getReimbursement method called");
+		log.debug("Reimbursement Form for" + ctx.pathParam("reimbursementId"));
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
+		UUID id = UUID.fromString(ctx.pathParam("id"));
+		String employee = ctx.pathParam("employee");
+		String loggedName = loggedUser.getName();
+	
+		ReimbursementRequest reRequest = (ReimbursementRequest) reService.getReimbursementForm(id, employee);
+		
+		if(loggedName.equals(employee)) {
+			ctx.json(reRequest);
+		} else {
+			ctx.status(403);
+		}
+		
 		
 	}
 
@@ -204,6 +215,33 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 			return;
 		}
 		
+		UUID id = UUID.fromString(ctx.pathParam("id"));
+		Integer index = Integer.parseInt(ctx.pathParam("index"));
+		log.debug("The index from the path: " + index);
+		if(id == null) {
+			ctx.status(400);
+			return;
+		}
+		String username = ctx.pathParam("name");
+		ReimbursementRequest reForm =  (ReimbursementRequest) reService.getReimbursementForm(id, username);
+		//check if form exists
+		if(reForm == null) {
+			ctx.status(404);
+			return;
+		}
+		
+		String filetype = ctx.header("extension");
+		if(filetype == null) {
+			ctx.status(400);
+			return;
+		}
+		String key = reForm.getAttachment().get(index);
+		try {
+			InputStream picture = S3Util.getInstance().getObject(key);
+			ctx.result(picture);
+		} catch (Exception e) {
+			ctx.status(500);
+		}	
 	}
 
 	@Override

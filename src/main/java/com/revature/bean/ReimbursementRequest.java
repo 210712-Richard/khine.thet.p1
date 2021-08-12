@@ -8,8 +8,7 @@ import java.util.UUID;
 
 public interface ReimbursementRequest extends Serializable {
 	Integer Max_Reimbursement_Amount = 1000;
-	//How to make the request limit to 1000?
-	//make it from submitted date and add the value you want to for approval date
+	
 	UUID getId();
 	void setId(UUID id);
 	
