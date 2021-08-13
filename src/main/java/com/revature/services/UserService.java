@@ -10,5 +10,11 @@ public interface UserService {
 	public User login(String name);
 	
 	public List<Notification> notification(String username);
+	
+	public void updateUser(User user);
+	
+	public User checkUser(User user);
+	
+	//public void autoApprove();
 }
 

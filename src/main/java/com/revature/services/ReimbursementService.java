@@ -16,11 +16,14 @@ public interface ReimbursementService {
 	
 	void updateReimbursementForm(ReimbursementRequest reRequest);
 	
-	List<ReimbursementForm> getReimbursementForm(UUID id, String name);
+	List<ReimbursementForm> getReimbursementForm(String name);
 	
 	//ReimbursementRequest getReimbursementForm(UUID id, String name);
+	void approveForm(User name, String username, UUID id);
 	
 	void deleteReimbursementForm(String name, UUID id);
 	
 	void getApprovalDate(LocalDate submittedDate);
+	
+	ReimbursementForm getReimbursementFormByNameandId(UUID id, String name);
 }

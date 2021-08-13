@@ -15,7 +15,7 @@ public interface ReimbursementController {
 	void getNotification(Context ctx);
 	//As a Employee, I can see the approval/ rejection reason.
 	void getReason(Context ctx);
-	//As an Employee, I can delete the reimbursement form.(done)
+	//As an Employee, I can delete the reimbursement form.
 	void deleteForm(Context ctx);
 	
 	

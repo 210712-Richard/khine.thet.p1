@@ -46,7 +46,7 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		ReimbursementRequest reRequest = ctx.bodyAsClass(ReimbursementForm.class);
 		log.debug(reRequest);
 		
-		reService.addReimbursementForm(loggedUser.getName(), 
+		reService.addReimbursementForm(reRequest.getName(), 
 				reRequest.getSubmittedDate(), reRequest.getLocation(), reRequest.getDescription(),
 				reRequest.getCost(), reRequest.getFormat(), reRequest.getType(),
 				reRequest.getWorkTimeMissed(), reRequest.getUrgent());
@@ -56,10 +56,12 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 
 	@Override
 	public void uploadAttachment(Context ctx) {
-		log.trace("addAttachment method called");
-		log.debug(ctx.body());
-		
+		log.trace("uploadAttachment method called");
+		String attachmentType = ctx.header("attachmentType");
 		User loggedUser = ctx.sessionAttribute("loggedUser");
+		String username = ctx.pathParam("employee");
+		UUID id = UUID.fromString(ctx.pathParam("id"));
+		
 		//login check
 		if(loggedUser == null) {
 			ctx.status(401);
@@ -71,13 +73,8 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 			return;
 		}
 		
-		UUID id = UUID.fromString(ctx.pathParam("id"));
-		if(id == null) {
-			ctx.status(400);
-			return;
-		}
-		String username = ctx.pathParam("name");
-		ReimbursementRequest reForm =  (ReimbursementRequest) reService.getReimbursementForm(id, username);
+		
+		ReimbursementRequest reForm = reService.getReimbursementFormByNameandId(id, username);
 		//check if form exists
 		if(reForm == null) {
 			ctx.status(404);
@@ -85,15 +82,14 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		}
 		
 		String filetype = ctx.header("extension");
-		if(filetype == null) {
+		if(filetype == null && filetype != attachmentType) {
 			ctx.status(400);
 			return;
 		}
 		
-		String key =  id +"." + filetype;
+		String key =  id + "/attachment/" + reForm.getAttachment().size() + filetype;
 		S3Util.getInstance().uploadToBucket(key, ctx.bodyAsBytes());
 		reForm.getAttachment().add(key);
-		reService.updateReimbursementForm(reForm);
 		ctx.json(reForm);
 	}
 
@@ -153,48 +149,24 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		
 	}
 
-	@Override
-	public void deleteForm(Context ctx) {
-		log.trace("deleteForm method called");
-		log.debug(ctx.body());
-		
-		User loggedUser = ctx.sessionAttribute("loggedUser");
-		//login check
-		if(loggedUser == null) {
-			ctx.status(401);
-			return;
-		}
-		
-		UUID id = UUID.fromString("id");
-		String employee = ctx.pathParam("employee");
-		
-		if(employee.equals(loggedUser.getName())) {
-			ReimbursementForm reForm = (ReimbursementForm) reService.getReimbursementForm(id, employee);
-			reService.deleteReimbursementForm(employee, id);
-		} else {
-			ctx.status(403);
-		}
-		
-	}
 
 	@Override
 	public void getReimbursement(Context ctx) {
 		log.trace("getReimbursement method called");
-		log.debug("Reimbursement Form for" + ctx.pathParam("reimbursementId"));
+		log.debug("Reimbursement Form(s) for " + ctx.pathParam("employee"));
 		
+		String username = ctx.pathParam("employee");
 		User loggedUser = ctx.sessionAttribute("loggedUser");
 		//login check
-		if(loggedUser == null) {
+		if(loggedUser == null || !loggedUser.getName().equals(username)) {
 			ctx.status(401);
 			return;
 		}
-		UUID id = UUID.fromString(ctx.pathParam("id"));
-		String employee = ctx.pathParam("employee");
-		String loggedName = loggedUser.getName();
-	
-		ReimbursementRequest reRequest = (ReimbursementRequest) reService.getReimbursementForm(id, employee);
 		
-		if(loggedName.equals(employee)) {
+		String loggedName = loggedUser.getName();
+		List<ReimbursementForm> reRequest = reService.getReimbursementForm(username);
+		
+		if(loggedName.equals(username)) {
 			ctx.json(reRequest);
 		} else {
 			ctx.status(403);
@@ -222,8 +194,8 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 			ctx.status(400);
 			return;
 		}
-		String username = ctx.pathParam("name");
-		ReimbursementRequest reForm =  (ReimbursementRequest) reService.getReimbursementForm(id, username);
+		String username = ctx.pathParam("employee");
+		ReimbursementRequest reForm =  (ReimbursementRequest) reService.getReimbursementForm(username);
 		//check if form exists
 		if(reForm == null) {
 			ctx.status(404);
@@ -260,16 +232,27 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 
 	@Override
 	public void updateApproval(Context ctx) {
+		//login user need to be supervisor, departmenthead or benco to continue
 		log.trace("updateApproval method called");
 		log.debug(ctx.body());
 		
 		User loggedUser = ctx.sessionAttribute("loggedUser");
+		String username = ctx.pathParam("employee");
+		UUID id = UUID.fromString("id");
 		//login check
 		if(loggedUser == null) {
 			ctx.status(401);
 			return;
 		}
 		
+		if (loggedUser.getType().equals(UserType.DIRECT_SUPERVISOR) ||
+			loggedUser.getType().equals(UserType.DEPARTMENT_HEAD) ||
+			loggedUser.getType().equals(UserType.BENCO)) {					
+			reService.approveForm(loggedUser, username, id);
+		} else {
+			ctx.status(403);
+			return;
+		}	
 	}
 
 	@Override
@@ -277,7 +260,7 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		log.trace("changeReimbursementAmount method called");
 		log.debug(ctx.body());
 		
-		User loggedUser = ctx.sessionAttribute("loggedUser");
+		User loggedUser = ctx.sessionAttribute("log gedUser");
 		//login check
 		if(loggedUser == null) {
 			ctx.status(401);
@@ -286,5 +269,28 @@ public class ReimbursementControllerImpl implements ReimbursementController{
 		
 	}
 
+
+	@Override
+	public void deleteForm(Context ctx) {
+		log.trace("deleteForm method called");
+		log.debug(ctx.body());
+		
+		User loggedUser = ctx.sessionAttribute("loggedUser");
+		//login check
+		if(loggedUser == null) {
+			ctx.status(401);
+			return;
+		}
+
+		String username = ctx.pathParam("employee");
+		UUID id = UUID.fromString(ctx.pathParam("id"));
+		
+		if(username.equals(loggedUser.getName())) {
+			reService.deleteReimbursementForm(username, id);
+		} else {
+			ctx.status(403);
+		}
+		
+	}
 	
 }

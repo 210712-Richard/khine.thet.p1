@@ -40,5 +40,6 @@ public class UserControllerImpl implements UserController {
 		ctx.req.getSession().invalidate();
 		ctx.status(204);
 	}
+
 	
 }

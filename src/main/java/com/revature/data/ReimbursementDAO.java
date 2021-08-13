@@ -15,5 +15,5 @@ public interface ReimbursementDAO {
 	
 	void deleteReimbursementForm(String name, UUID id);
 
-	List<ReimbursementForm> getReimbursementForm(UUID id, String name);	
+	List<ReimbursementForm> getReimbursementForm(String name);
 }

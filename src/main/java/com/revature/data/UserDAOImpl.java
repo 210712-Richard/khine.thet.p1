@@ -79,6 +79,7 @@ public class UserDAOImpl implements UserDAO {
 		user.setDirectSupervisor(row.getString("directsupervisor"));
 		user.setDepartmentHead(row.getString("departmenthead"));
 		user.setBenCo(row.getString("benco"));
+		
 
 		return user;
 	}  
@@ -87,11 +88,11 @@ public class UserDAOImpl implements UserDAO {
 	public void updateUser(User user) {
 		log.trace("updateUser method called");
 		
-		String query = "Update user set type = ?, email = ?, supervisor = ?, departmenthead = ?, benco = ? where username = ?;";
-		List<Notification> notification = user.getNotification();
+		String query = "Update user set type = ?, email = ?, supervisor = ?, departmenthead = ?, benco = ?, reform = ? where username = ?;";
+		List<UUID> form = user.getRequest();		
 		SimpleStatement s = new SimpleStatementBuilder(query).setConsistencyLevel(DefaultConsistencyLevel.LOCAL_QUORUM).build();
 		BoundStatement bound = session.prepare(s)
-				.bind(user.getType().toString(), user.getEmail(), notification, user.getDirectSupervisor(), user.getDepartmentHead(), user.getBenCo());
+				.bind(user.getType().toString(), user.getEmail(), user.getDirectSupervisor(), user.getDepartmentHead(), user.getBenCo(), form);
 		session.execute(bound);
 	}
 	

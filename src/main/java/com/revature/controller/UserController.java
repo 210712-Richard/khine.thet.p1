@@ -7,4 +7,5 @@ public interface UserController {
 	void login(Context ctx);
 
 	void logout(Context ctx);
+
 }

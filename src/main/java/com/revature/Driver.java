@@ -19,7 +19,6 @@ public class Driver {
 	public static void main(String[] args) {
 		//DataBaseCreator.createTables();
 		//DataBaseCreator.populateUserTable();
-		//DataBaseCreator.populateReimbursementTable();
 		//DataBaseCreator.dropTables();
 		//instantiateDatabase();
 		javalin();	
@@ -70,10 +69,14 @@ public class Driver {
 		app.get("/requests/:employee", rc::getReimbursement);
 		
 		//upload attachment
-		app.post("/requests/:username/id", rc::uploadAttachment);
+		app.put("/requests/attachment/:employee/:id", rc::uploadAttachment);
 		
-		//get request
-		app.get("/requests/:id", rc::getReimbursement);
+		//delete reimbursement
+		app.delete("/requests/:employee/:id", rc::deleteForm);
+		
+		//approve form
+		app.put("/requests/:employee/:id/formApproval", rc::updateApproval);
 	}
+	
 
 }

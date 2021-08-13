@@ -4,24 +4,24 @@ import java.util.Objects;
 
 public class ReimbursementApproval {
 	
-	private Approval status;
+	private String status;
 	private String reason;
 	
 	public ReimbursementApproval() {
 		super();
-		this.status = Approval.PENDING;
+		this.status = Approval.PENDING.toString();
+		this.reason = "N/A";
 	}
 	
 	public ReimbursementApproval(String reason) {
 		this();
-		this.reason = reason;
 	}
 	
-	public Approval getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Approval status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

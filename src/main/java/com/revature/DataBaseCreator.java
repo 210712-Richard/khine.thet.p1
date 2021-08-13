@@ -34,8 +34,8 @@ public class DataBaseCreator {
 		
 		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Reimbursementform (")
 				.append("id uuid, name text, submitteddate date, approvaldate date, ")
-				.append("location text, description text, cost bigInt, gradeFormat text, ")
-				.append("type text, timemissed text, urgent boolean, attachment list<uuid>, ")
+				.append("location text, description text, cost Double, gradeFormat text, ")
+				.append("type text, timemissed text, urgent boolean, attachment List<text>, ")
 				.append("supervisorapproval tuple<text, text>, ")
 				.append("departmentheadapproval tuple<text, text>, ")
 				.append("bencoapproval tuple<text, text>, ")
@@ -44,7 +44,7 @@ public class DataBaseCreator {
 		
 		sb = new StringBuilder("CREATE TABLE IF NOT EXISTS Notification (")
 				.append("name text, id uuid, approvalstatus text, approvaldate date, reason text, ")
-				.append("primary key(name, id));");
+				.append("primary key(id, name));");
 		CassandraUtil.getInstance().getSession().execute(sb.toString());
 	}
 
@@ -80,12 +80,4 @@ public class DataBaseCreator {
 		ud.addUser(new User("Henry", "hennie@re.com", "Jelly", "Cherry", "Ferrero"));
 		ud.addUser(new User("William", "liam@wii.com", "Dulce", "Basil", "Reese"));
 	}
-
-	public static void populateReimbursementTable() {
-		rd.addReimbursementForm(new ReimbursementForm("Sunny", LocalDate.of(2021, 07, 14), "123 Flower Road, Brooklyn NY 12345",
-								"8 weeks university course for Organic Chemistry.", 400.75, GradingFormat.LETTER_GRADE, ReimbursementType.UNIVERSITY,
-								"Once a week", true));
-		
-	}
-
 }

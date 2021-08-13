@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -29,10 +30,16 @@ public class ReimbursementForm implements ReimbursementRequest {
 	
 	public ReimbursementForm() {
 		super();
+		id = UUID.randomUUID();
 		this.approvalDate = LocalDate.of(2021, 12, 12);//LocalDate.from(submittedDate).plusDays(1);
+		this.supervisorApproval = new ReimbursementApproval();
+		this.departmentHeadApproval = new ReimbursementApproval();
+		this.benCoApproval = new ReimbursementApproval();
+		this.attachment = new ArrayList<>();
+		urgent = false;
 	}
 	
-	public ReimbursementForm(String name, LocalDate submittedDate, String location, 
+	public ReimbursementForm(UUID id, String name, LocalDate submittedDate, String location, 
 			String description, Double cost, GradingFormat format, ReimbursementType type, String workTimeMissed, Boolean urgent) {
 		this();
 		this.name = name;
@@ -162,6 +169,7 @@ public class ReimbursementForm implements ReimbursementRequest {
 	public void setBenCoApproval(ReimbursementApproval benCoApproval) {
 		this.benCoApproval = benCoApproval;
 	}
+
 	
 	@Override
 	public int hashCode() {
@@ -196,6 +204,8 @@ public class ReimbursementForm implements ReimbursementRequest {
 				+ ", attachment=" + attachment + ", supervisorApproval=" + supervisorApproval
 				+ ", departmentHeadApproval=" + departmentHeadApproval + ", benCoApproval=" + benCoApproval + "]";
 	}
+
+
 
 
 
